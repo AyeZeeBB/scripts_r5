@@ -105,5 +105,28 @@
 		"pin_corner_to_sibling"	"BOTTOM_RIGHT"
 		"pin_to_sibling_corner"	"BOTTOM_RIGHT"
 	}
+
+	OpenLootBoxButton
+        {
+            ControlName             RuiButton
+            classname               "MenuButton"
+            wide                    376
+            tall                    112
+            xpos                    -28
+            ypos                    -128
+            zpos                    25
+            rui                     "ui/generic_loot_button.rpak"
+            labelText               ""
+            visible                 1
+            enabled					1
+            tabPosition             1
+
+            pin_to_sibling			DarkenBackground
+            pin_corner_to_sibling	BOTTOM_RIGHT
+            pin_to_sibling_corner	BOTTOM_RIGHT
+
+            sound_focus             "UI_Menu_Focus_Large"
+            sound_accept            "UI_Menu_OpenLootBox"
+        }
 }
 

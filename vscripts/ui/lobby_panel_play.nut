@@ -1655,7 +1655,7 @@ void function UpdateMiniPromoPinning()
 void function UpdateLootBoxButton( var button, array<ItemFlavor> specificPackFlavs = [] )
 {
 	ItemFlavor ornull packFlav
-	int lootBoxCount    = 0
+	int lootBoxCount    = 69
 	string buttonText   = "#LOOT_BOXES"
 	string descText     = "#UNAVAILABLE"
 	int nextRarity      = -1
@@ -1681,12 +1681,12 @@ void function UpdateLootBoxButton( var button, array<ItemFlavor> specificPackFla
 		}
 		else
 		{
-			lootBoxCount = GRX_GetTotalPackCount()
+			//lootBoxCount = GRX_GetTotalPackCount()
 			if ( lootBoxCount > 0 )
 			{
-				packFlav = GetNextLootBox()
-				expect ItemFlavor( packFlav )
-				nextRarity = ItemFlavor_GetQuality( packFlav )
+				//packFlav = GetNextLootBox()
+				//expect ItemFlavor( packFlav )
+				//nextRarity = ItemFlavor_GetQuality( packFlav )
 			}
 
 			buttonText = (lootBoxCount == 1 ? "#LOOT_BOX" : "#LOOT_BOXES")
@@ -1711,17 +1711,29 @@ void function UpdateLootBoxButton( var button, array<ItemFlavor> specificPackFla
 			countTextCol = SrgbToLinear( expect vector(customCountTextCol) )
 	}
 
-	HudElem_SetRuiArg( button, "bigText", string( lootBoxCount ) )
+	/*HudElem_SetRuiArg( button, "bigText", string( lootBoxCount ) )
 	HudElem_SetRuiArg( button, "buttonText", buttonText )
 	HudElem_SetRuiArg( button, "descText", descText )
 	HudElem_SetRuiArg( button, "descTextRarity", nextRarity )
 	HudElem_SetRuiArg( button, "rarityIcon", rarityIcon, eRuiArgType.ASSET )
 	RuiSetColorAlpha( Hud_GetRui( button ), "themeCol", themeCol, 1.0 )
+	RuiSetColorAlpha( Hud_GetRui( button ), "countTextCol", countTextCol, 1.0 )*/
+
+	//Hud_SetLocked( button, lootBoxCount == 0 )
+
+	//Hud_SetEnabled( button, lootBoxCount > 0 )
+
+	//Custom
+	HudElem_SetRuiArg( button, "bigText", "" )
+	HudElem_SetRuiArg( button, "buttonText", "Open Apex Pack" )
+	HudElem_SetRuiArg( button, "descText", "Apex Pack Simulator" )
+	HudElem_SetRuiArg( button, "descTextRarity", nextRarity )
+	HudElem_SetRuiArg( button, "rarityIcon", rarityIcon, eRuiArgType.ASSET )
+	RuiSetColorAlpha( Hud_GetRui( button ), "themeCol", themeCol, 1.0 )
 	RuiSetColorAlpha( Hud_GetRui( button ), "countTextCol", countTextCol, 1.0 )
 
-	Hud_SetLocked( button, lootBoxCount == 0 )
-
-	Hud_SetEnabled( button, lootBoxCount > 0 )
+	Hud_SetLocked( button, true )
+	Hud_SetEnabled( button, true )
 }
 
 

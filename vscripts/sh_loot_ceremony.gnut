@@ -525,8 +525,8 @@ void function UIToClient_OnGRXPackOpeningResultsAvailable()
 		fileLevel.itemPresentationDatas.append( wtfLeft )
 
 		ItemPresentationData wtfMiddle
-		wtfMiddle.item = GetItemFlavorByHumanReadableRef( "pack_cosmetic_rare" )
-		wtfMiddle.rarity = 3 //ItemFlavor_GetQuality( currencyFlav )
+		wtfMiddle.item = currencyFlav
+		wtfMiddle.rarity = ItemFlavor_GetQuality( currencyFlav )
 		wtfMiddle.attachment = TICK_LOOT_ATTACHMENTS[1]
 		wtfMiddle.quantity = middleQty
 		fileLevel.itemPresentationDatas.append( wtfMiddle )
@@ -952,6 +952,7 @@ void function TickAnimationSequence( ItemFlavor packFlav, bool firstTime )
 
 	if ( firstTime )
 		wait 0.25 // allow for fade in
+		
 
 	RunUIScript( "PlayCustomUIMusic", LOOT_CEREMONY_MUSIC_P1 )
 
@@ -965,6 +966,8 @@ void function TickAnimationSequence( ItemFlavor packFlav, bool firstTime )
 	// wait for grx rewards to come in
 	//while( !fileLevel.grxRewardsReceived )
 		//WaitFrame()
+
+	GetRandomRewards()
 
 	// allow skip anim button
 	Hud_SetEnabled( fileLevel.skipAnimButton, true )
@@ -986,8 +989,8 @@ void function TickAnimationSequence( ItemFlavor packFlav, bool firstTime )
 	array<string> signalsToWait  = ["TickAnimStartDisplayLoot", "TickAnimSkip", "LootCeremonyTickCancelAnim"]
 	string resultSignal          = GetWaitMultipleSignal_Entity( fileLevel.lootTickModel, signalsToWait, "LootCeremonyAnimShowLootOrSkip" )
 
-	if ( resultSignal == "TickAnimStartDisplayLoot" )
-		animReachedDisplayEvent = true
+	//if ( resultSignal == "TickAnimStartDisplayLoot" )
+		//animReachedDisplayEvent = true
 
 	// disable the invisible fullscreen skip animation button
 	Hud_SetEnabled( fileLevel.skipAnimButton, false )
@@ -1378,7 +1381,7 @@ const float REWARDS_DELAY_TIER1 = 0.2
 
 
 #if CLIENT
-array<ItemFlavor> function GetRandomFlavorList()
+ItemFlavor function GetRandomItemFlavor()
 {
 	array<ItemFlavor> selected
 
@@ -1393,53 +1396,62 @@ array<ItemFlavor> function GetRandomFlavorList()
 			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
 			break;
 		case 2:
-			selected = GetAllItemFlavorsOfType( eItemType.weapon_skin )
+			selected = GetAllItemFlavorsOfType( eItemType.character_execution )
 			break;
 		case 3:
-			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
+			selected = GetAllItemFlavorsOfType( eItemType.weapon_charm )
 			break;
 		case 4:
-			selected = GetAllItemFlavorsOfType( eItemType.weapon_skin )
+			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_intro_quip )
 			break;
 		case 5:
-			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
+			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_kill_quip )
+			break;
+		case 6:
+			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_stat_tracker )
+			break;
+		case 7:
+			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_badge )
 			break;
 	}
 
-	return selected
+	ItemFlavor randomitem = selected[RandomIntRange( 0, selected.len() )]
+
+	return randomitem
 }
+
+void function GetRandomRewards()
+{
+	ItemFlavor random1 = GetRandomItemFlavor()
+	ItemFlavor random2 = GetRandomItemFlavor()
+	ItemFlavor random3 = GetRandomItemFlavor()
+
+	ItemPresentationData wtfLeft
+	wtfLeft.item = random1
+	wtfLeft.rarity = ItemFlavor_GetQuality( random1 )
+	wtfLeft.attachment = TICK_LOOT_ATTACHMENTS[0]
+	wtfLeft.quantity = 1
+	fileLevel.itemPresentationDatas.append( wtfLeft )
+
+	ItemPresentationData wtfMiddle
+	wtfMiddle.item = random2
+	wtfMiddle.rarity = ItemFlavor_GetQuality( random2 )
+	wtfMiddle.attachment = TICK_LOOT_ATTACHMENTS[1]
+	wtfMiddle.quantity = 1
+	fileLevel.itemPresentationDatas.append( wtfMiddle )
+
+	ItemPresentationData wtfRight
+	wtfRight.item = random3
+	wtfRight.rarity = ItemFlavor_GetQuality( random3 )
+	wtfRight.attachment = TICK_LOOT_ATTACHMENTS[2]
+	wtfRight.quantity = 1
+	fileLevel.itemPresentationDatas.append( wtfRight )
+}
+
 void function LootCeremonySequenceShowRewards()
 {
 	EndSignal( fileLevel.signalDummy, "LootCeremonyExit" )
 	EndSignal( fileLevel.signalDummy, "LootCeremonyAnimSeqStart" )
-
-	array<ItemFlavor> selected1 = GetRandomFlavorList()
-	array<ItemFlavor> selected2 = GetRandomFlavorList()
-	array<ItemFlavor> selected3 = GetRandomFlavorList()
-
-
-	ItemPresentationData wtfLeft
-		wtfLeft.item = selected1[RandomIntRange( 0, selected1.len() )]
-		wtfLeft.rarity = 4
-		wtfLeft.attachment = TICK_LOOT_ATTACHMENTS[0]
-		wtfLeft.quantity = 1
-		fileLevel.itemPresentationDatas.append( wtfLeft )
-
-
-
-		ItemPresentationData wtfMiddle
-		wtfMiddle.item = selected2[RandomIntRange( 0, selected2.len() )]
-		wtfMiddle.rarity = 4 //ItemFlavor_GetQuality( currencyFlav )
-		wtfMiddle.attachment = TICK_LOOT_ATTACHMENTS[1]
-		wtfMiddle.quantity = 1
-		fileLevel.itemPresentationDatas.append( wtfMiddle )
-
-		ItemPresentationData wtfRight
-		wtfRight.item = selected3[RandomIntRange( 0, selected3.len() )]
-		wtfRight.rarity = 4
-		wtfRight.attachment = TICK_LOOT_ATTACHMENTS[2]
-		wtfRight.quantity = 1
-		fileLevel.itemPresentationDatas.append( wtfRight )
 
 	// show 3d rewards
 	for ( int i = 0; i < fileLevel.itemPresentationDatas.len(); i++ )
@@ -4602,15 +4614,15 @@ void function LootCeremony_UpdateOpenAdditionalButton()
 
 	if ( HasLootBeenPresented() && !IsInspectModeActive() && !IsSpecialItemPresentationModeActive() )
 	{
-		if ( GRX_IsInventoryReady() )
-		{
+		//if ( GRX_IsInventoryReady() )
+		//{
 			//
 			showButton = true
 			array<ItemFlavor> specificPackFlavs = []
-			if ( fileLevel.forceParticularPackFlav != null )
-				specificPackFlavs.append( expect ItemFlavor( fileLevel.forceParticularPackFlav ) )
+			//if ( fileLevel.forceParticularPackFlav != null )
+				//specificPackFlavs.append( expect ItemFlavor( fileLevel.forceParticularPackFlav ) )
 			UpdateLootBoxButton( fileForever.lootBoxOpenButton, specificPackFlavs )
-		}
+		//}
 	}
 
 	Hud_SetVisible( fileForever.lootBoxOpenButton, showButton )
@@ -4646,8 +4658,8 @@ void function ClientToUI_SetLootHasBeenPresented()
 	fileLevel.lootHasBeenPresented = true
 	fileLevel.considerFocusOpenButton = true
 	UpdateFooterOptions()
-	Hud_SetVisible( fileForever.storeButton, true )
-	Hud_SetEnabled( fileForever.storeButton, true )
+	Hud_SetVisible( fileForever.storeButton, false )
+	Hud_SetEnabled( fileForever.storeButton, false )
 }
 #endif
 
@@ -5098,6 +5110,8 @@ void function LootBoxOpenSequenceUI( bool firstTime )
 	UpdateFooterOptions()
 	Hud_SetVisible( fileForever.storeButton, false )
 	Hud_SetEnabled( fileForever.storeButton, false )
+
+	LootCeremony_UpdateOpenAdditionalButton()
 
 	// Get the actual rewards
 	ItemFlavor ornull pack
