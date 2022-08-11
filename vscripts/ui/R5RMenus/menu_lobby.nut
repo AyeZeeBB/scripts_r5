@@ -123,7 +123,9 @@ void function OpenSelectedPanel(var button)
 void function SettingsPressed(var button)
 {
 	//Open Settings Menu
-	AdvanceMenu( GetMenu( "MiscMenu" ) )
+	//AdvanceMenu( GetMenu( "MiscMenu" ) )
+	AdvanceMenu( GetMenu( "LootBoxOpen" ) )
+	//LootBoxOpenSequenceUI(true);
 }
 
 void function QuitPressed(var button)

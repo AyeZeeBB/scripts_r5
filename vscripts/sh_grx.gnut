@@ -668,7 +668,7 @@ int function GRXCurrencyBundle_GetValue( ItemFlavor flav )
 {
 	Assert( ItemFlavor_GetType( flav ) == eItemType.account_currency_bundle )
 
-	return GetCurrentPlaylistVarInt( "grx_" + ItemFlavor_GetHumanReadableRef( flav ) + "_count", -1 )
+	return GetCurrentPlaylistVarInt( "grx_" + ItemFlavor_GetHumanReadableRef( flav ) + "_count", 999 )
 }
 #endif
 
@@ -988,7 +988,7 @@ int function GRX_GetTotalPackCount()
 {
 	Assert( GetPlayerGRXScriptState( GetUIPlayer() ).isInventoryReady )
 
-	int count = 0
+	int count = 69
 	foreach ( ItemFlavor pack in GRX_GetAllPackFlavors() )
 		count += GRX_GetPackCount( ItemFlavor_GetGRXIndex( pack ) )
 

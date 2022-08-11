@@ -525,8 +525,8 @@ void function UIToClient_OnGRXPackOpeningResultsAvailable()
 		fileLevel.itemPresentationDatas.append( wtfLeft )
 
 		ItemPresentationData wtfMiddle
-		wtfMiddle.item = currencyFlav
-		wtfMiddle.rarity = ItemFlavor_GetQuality( currencyFlav )
+		wtfMiddle.item = GetItemFlavorByHumanReadableRef( "pack_cosmetic_rare" )
+		wtfMiddle.rarity = 3 //ItemFlavor_GetQuality( currencyFlav )
 		wtfMiddle.attachment = TICK_LOOT_ATTACHMENTS[1]
 		wtfMiddle.quantity = middleQty
 		fileLevel.itemPresentationDatas.append( wtfMiddle )
@@ -963,8 +963,8 @@ void function TickAnimationSequence( ItemFlavor packFlav, bool firstTime )
 	wait 0.5
 
 	// wait for grx rewards to come in
-	while( !fileLevel.grxRewardsReceived )
-		WaitFrame()
+	//while( !fileLevel.grxRewardsReceived )
+		//WaitFrame()
 
 	// allow skip anim button
 	Hud_SetEnabled( fileLevel.skipAnimButton, true )
@@ -982,7 +982,7 @@ void function TickAnimationSequence( ItemFlavor packFlav, bool firstTime )
 	thread WaitForTickAnimCompleteAndSignalDisplayLoot( fileLevel.lootTickModel, deployAnim )
 
 	// wait for either anim to reach its display event or user skips anim (or early exit out of loot ceremony)
-	bool animReachedDisplayEvent = false
+	bool animReachedDisplayEvent = true
 	array<string> signalsToWait  = ["TickAnimStartDisplayLoot", "TickAnimSkip", "LootCeremonyTickCancelAnim"]
 	string resultSignal          = GetWaitMultipleSignal_Entity( fileLevel.lootTickModel, signalsToWait, "LootCeremonyAnimShowLootOrSkip" )
 
@@ -1378,10 +1378,68 @@ const float REWARDS_DELAY_TIER1 = 0.2
 
 
 #if CLIENT
+array<ItemFlavor> function GetRandomFlavorList()
+{
+	array<ItemFlavor> selected
+
+	int num = RandomIntRange( 0, 5 )
+
+	switch(num)
+	{
+		case 0:
+			selected = GetAllItemFlavorsOfType( eItemType.weapon_skin )
+			break;
+		case 1:
+			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
+			break;
+		case 2:
+			selected = GetAllItemFlavorsOfType( eItemType.weapon_skin )
+			break;
+		case 3:
+			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
+			break;
+		case 4:
+			selected = GetAllItemFlavorsOfType( eItemType.weapon_skin )
+			break;
+		case 5:
+			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
+			break;
+	}
+
+	return selected
+}
 void function LootCeremonySequenceShowRewards()
 {
 	EndSignal( fileLevel.signalDummy, "LootCeremonyExit" )
 	EndSignal( fileLevel.signalDummy, "LootCeremonyAnimSeqStart" )
+
+	array<ItemFlavor> selected1 = GetRandomFlavorList()
+	array<ItemFlavor> selected2 = GetRandomFlavorList()
+	array<ItemFlavor> selected3 = GetRandomFlavorList()
+
+
+	ItemPresentationData wtfLeft
+		wtfLeft.item = selected1[RandomIntRange( 0, selected1.len() )]
+		wtfLeft.rarity = 4
+		wtfLeft.attachment = TICK_LOOT_ATTACHMENTS[0]
+		wtfLeft.quantity = 1
+		fileLevel.itemPresentationDatas.append( wtfLeft )
+
+
+
+		ItemPresentationData wtfMiddle
+		wtfMiddle.item = selected2[RandomIntRange( 0, selected2.len() )]
+		wtfMiddle.rarity = 4 //ItemFlavor_GetQuality( currencyFlav )
+		wtfMiddle.attachment = TICK_LOOT_ATTACHMENTS[1]
+		wtfMiddle.quantity = 1
+		fileLevel.itemPresentationDatas.append( wtfMiddle )
+
+		ItemPresentationData wtfRight
+		wtfRight.item = selected3[RandomIntRange( 0, selected3.len() )]
+		wtfRight.rarity = 4
+		wtfRight.attachment = TICK_LOOT_ATTACHMENTS[2]
+		wtfRight.quantity = 1
+		fileLevel.itemPresentationDatas.append( wtfRight )
 
 	// show 3d rewards
 	for ( int i = 0; i < fileLevel.itemPresentationDatas.len(); i++ )
@@ -1475,6 +1533,9 @@ void function LootCeremonySequenceShowRewards()
 		else
 			fileLevel.dummyInspectButtons[i].shouldShow = false
 	}
+
+	fileLevel.itemPresentationDatas.clear()
+
 	EnableFakeInspectButtons()
 }
 #endif
@@ -5048,6 +5109,8 @@ void function LootBoxOpenSequenceUI( bool firstTime )
 	{
 		pack = GetNextLootBox()
 	}
+
+	pack = GetItemFlavorByHumanReadableRef( "pack_cosmetic_rare" )
 	Assert( pack != null )
 	expect ItemFlavor( pack )
 	int quality = ItemFlavor_GetQuality( pack )
@@ -5069,13 +5132,8 @@ void function LootBoxOpenSequenceUI( bool firstTime )
 		printt( "GRX_OpenPack", opID, ItemFlavor_GetGRXIndex( pack ) )
 		GRX_OpenPack( opID, ItemFlavor_GetGRXIndex( pack ) )
 	})
-	operation.onDoneCallback = (void function( int status ) : ( operation ) {
-		if ( status == eScriptGRXOperationStatus.DONE_SUCCESS )
-			RunClientScript( "UIToClient_OnGRXPackOpeningResultsAvailable" )
-		else
-			CloseActiveMenu()
-	})
-	QueueGRXOperation( GetUIPlayer(), operation )
+	operation.onDoneCallback = null
+	QueueGRXOperation( GetUIPlayer(), operation, true )
 }
 #endif
 
