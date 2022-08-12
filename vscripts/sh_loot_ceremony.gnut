@@ -1385,7 +1385,7 @@ ItemFlavor function GetRandomItemFlavor()
 {
 	array<ItemFlavor> selected
 
-	int num = RandomIntRange( 0, 6 )
+	int num = RandomIntRange( 0, 8 )
 
 	switch(num)
 	{
@@ -1396,18 +1396,24 @@ ItemFlavor function GetRandomItemFlavor()
 			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
 			break;
 		case 2:
-			selected = GetAllItemFlavorsOfType( eItemType.character_execution )
+			selected = GetAllItemFlavorsOfType( eItemType.weapon_skin )
 			break;
 		case 3:
-			selected = GetAllItemFlavorsOfType( eItemType.weapon_charm )
+			selected = GetAllItemFlavorsOfType( eItemType.character_skin )
 			break;
 		case 4:
-			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_intro_quip )
+			selected = GetAllItemFlavorsOfType( eItemType.character_execution )
 			break;
 		case 5:
-			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_kill_quip )
+			selected = GetAllItemFlavorsOfType( eItemType.weapon_charm )
 			break;
 		case 6:
+			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_intro_quip )
+			break;
+		case 7:
+			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_kill_quip )
+			break;
+		case 8:
 			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_stat_tracker )
 			break;
 	}
@@ -5123,6 +5129,7 @@ void function LootBoxOpenSequenceUI( bool firstTime )
 		pack = GetNextLootBox()
 	}*/
 
+	ItemFlavor ornull pack
 	pack = GetItemFlavorByHumanReadableRef( "pack_cosmetic_rare" )
 	Assert( pack != null )
 	expect ItemFlavor( pack )
