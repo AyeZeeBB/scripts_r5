@@ -1385,7 +1385,7 @@ ItemFlavor function GetRandomItemFlavor()
 {
 	array<ItemFlavor> selected
 
-	int num = RandomIntRange( 0, 5 )
+	int num = RandomIntRange( 0, 6 )
 
 	switch(num)
 	{
@@ -1410,9 +1410,6 @@ ItemFlavor function GetRandomItemFlavor()
 		case 6:
 			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_stat_tracker )
 			break;
-		case 7:
-			selected = GetAllItemFlavorsOfType( eItemType.gladiator_card_badge )
-			break;
 	}
 
 	ItemFlavor randomitem = selected[RandomIntRange( 0, selected.len() )]
@@ -1428,21 +1425,21 @@ void function GetRandomRewards()
 
 	ItemPresentationData wtfLeft
 	wtfLeft.item = random1
-	wtfLeft.rarity = ItemFlavor_GetQuality( random1 )
+	wtfLeft.rarity = ItemFlavor_GetQuality( random1, 0 )
 	wtfLeft.attachment = TICK_LOOT_ATTACHMENTS[0]
 	wtfLeft.quantity = 1
 	fileLevel.itemPresentationDatas.append( wtfLeft )
 
 	ItemPresentationData wtfMiddle
 	wtfMiddle.item = random2
-	wtfMiddle.rarity = ItemFlavor_GetQuality( random2 )
+	wtfMiddle.rarity = ItemFlavor_GetQuality( random2, 0 )
 	wtfMiddle.attachment = TICK_LOOT_ATTACHMENTS[1]
 	wtfMiddle.quantity = 1
 	fileLevel.itemPresentationDatas.append( wtfMiddle )
 
 	ItemPresentationData wtfRight
 	wtfRight.item = random3
-	wtfRight.rarity = ItemFlavor_GetQuality( random3 )
+	wtfRight.rarity = ItemFlavor_GetQuality( random3, 0 )
 	wtfRight.attachment = TICK_LOOT_ATTACHMENTS[2]
 	wtfRight.quantity = 1
 	fileLevel.itemPresentationDatas.append( wtfRight )
