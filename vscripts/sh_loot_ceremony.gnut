@@ -2043,7 +2043,9 @@ void function ShowRewards_WeaponCharm( ItemFlavor item, vector origin, vector an
 	WeaponCosmetics_Apply( weaponModel, null, item )
 
 	entity charmEnt = GetCharmForWeaponEntity( weaponModel )
-	charmEnt.SetModelScale( WEAPON_CHARM_BASE_SCALE * WEAPON_CHARM_EXTRA_SCALE )
+
+	if(IsValid( charmEnt ))
+		charmEnt.SetModelScale( WEAPON_CHARM_BASE_SCALE * WEAPON_CHARM_EXTRA_SCALE )
 
 	ModelIntroHighlightEffect( weaponModel, rarity, true )
 	LootCeremonyUpdateSpotLights( attachment, true, eItemType.weapon_skin )
@@ -5111,7 +5113,7 @@ void function LootBoxOpenSequenceUI( bool firstTime )
 	LootCeremony_UpdateOpenAdditionalButton()
 
 	// Get the actual rewards
-	ItemFlavor ornull pack
+	/*ItemFlavor ornull pack
 	if ( fileLevel.forceParticularPackFlav )
 	{
 		pack = fileLevel.forceParticularPackFlav
@@ -5119,7 +5121,7 @@ void function LootBoxOpenSequenceUI( bool firstTime )
 	else
 	{
 		pack = GetNextLootBox()
-	}
+	}*/
 
 	pack = GetItemFlavorByHumanReadableRef( "pack_cosmetic_rare" )
 	Assert( pack != null )
