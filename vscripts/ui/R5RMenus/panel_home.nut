@@ -15,7 +15,7 @@ void function InitR5RHomePanel( var panel )
 	file.menu = GetParentMenu( file.panel )
 
 	file.lootBoxOpenButton = Hud_GetChild( file.panel, "OpenLootBoxButton" )
-	HudElem_SetRuiArg( file.lootBoxOpenButton, "buttonText", "Open Apex Pack" )
+	HudElem_SetRuiArg( file.lootBoxOpenButton, "buttonText", "Open Apex Packs" )
 	HudElem_SetRuiArg( file.lootBoxOpenButton, "descText", "Apex Pack Simulator" )
 	AddButtonEventHandler( file.lootBoxOpenButton, UIE_CLICK, OpenLootBox )
 
