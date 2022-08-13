@@ -1724,9 +1724,9 @@ void function UpdateLootBoxButton( var button, array<ItemFlavor> specificPackFla
 	//Hud_SetEnabled( button, lootBoxCount > 0 )
 
 	//Custom
-	HudElem_SetRuiArg( button, "bigText", "" )
-	HudElem_SetRuiArg( button, "buttonText", "Open Apex Pack" )
-	HudElem_SetRuiArg( button, "descText", "Apex Pack Simulator" )
+	HudElem_SetRuiArg( button, "bigText", "∞" )
+	HudElem_SetRuiArg( button, "buttonText", "Apex Packs" )
+	HudElem_SetRuiArg( button, "descText", "REMAINING" )
 	HudElem_SetRuiArg( button, "descTextRarity", nextRarity )
 	HudElem_SetRuiArg( button, "rarityIcon", rarityIcon, eRuiArgType.ASSET )
 	RuiSetColorAlpha( Hud_GetRui( button ), "themeCol", themeCol, 1.0 )
