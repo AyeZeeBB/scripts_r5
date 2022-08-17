@@ -106,6 +106,7 @@
 		"pin_to_sibling_corner"	"BOTTOM_RIGHT"
 	}
 
+
 	LootBoxBG
 	{
 		ControlName RuiPanel
@@ -125,26 +126,54 @@
 	}
 
 	OpenLootBoxButton
-        {
-            ControlName             RuiButton
-            classname               "MenuButton"
-            wide                    376
-            tall                    112
-            xpos                    0
-            ypos                    0
-            zpos                    25
-            rui                     "ui/generic_loot_button.rpak"
-            labelText               ""
-            visible                 1
-            enabled					1
-            tabPosition             1
+    {
+        ControlName             RuiButton
+        classname               "MenuButton"
+        wide                    376
+        tall                    112
+        xpos                    0
+        ypos                    0
+        zpos                    25
+        rui                     "ui/generic_loot_button.rpak"
+        labelText               ""
+        visible                 1
+        enabled					1
+        tabPosition             1
 
-            pin_to_sibling			LootBoxBG
-            pin_corner_to_sibling	LEFT
-            pin_to_sibling_corner	LEFT
+        pin_to_sibling			LootBoxBG
+        pin_corner_to_sibling	LEFT
+        pin_to_sibling_corner	LEFT
 
-            sound_focus             "UI_Menu_Focus_Large"
-            sound_accept            "UI_Menu_OpenLootBox"
-        }
+        sound_focus             "UI_Menu_Focus_Large"
+        sound_accept            "UI_Menu_OpenLootBox"
+    }
+
+	SelfButton
+    {
+        ControlName				RuiButton
+        wide					340
+        tall					88
+        xpos                    0
+        ypos                    -70
+        rui                     "ui/lobby_friend_button.rpak"
+        labelText               ""
+        visible					1
+        cursorVelocityModifier  0.7
+        scriptID                -1
+        rightClickEvents		0
+        tabPosition             1
+
+        proportionalToParent    1
+
+		ruiArgs
+		{
+			canViewStats 0
+			isLeader 1
+		}
+
+        pin_to_sibling			DarkenBackground
+        pin_corner_to_sibling	TOP
+        pin_to_sibling_corner	TOP
+    }
 }
 
