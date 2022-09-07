@@ -2013,14 +2013,6 @@ void function AddInWorldMinimapObject_WhenValid( entity ent )
 			if ( IsFriendlyTeam( ent.GetTeam(), GetLocalViewPlayer().GetTeam() ) )
 				thread AddInWorldMinimapTeslaTrap( ent, file.mapTopo )
 			return
-
-		case "ctf_flag_mil":
-				thread AddInWorldMinimapObjectInternal( ent, file.mapTopo, $"rui/gamemodes/capture_the_flag/mil_flag", $"rui/gamemodes/capture_the_flag/mil_flag" )
-			return
-
-		case "ctf_flag_imc":
-				thread AddInWorldMinimapObjectInternal( ent, file.mapTopo, $"rui/gamemodes/capture_the_flag/imc_flag", $"rui/gamemodes/capture_the_flag/imc_flag" )
-			return
 	}
 
 	if ( !ent.IsPlayer() && !ent.IsTitan() )
@@ -2740,7 +2732,7 @@ bool function Survival_HandleKeyInput( int key )
 				vector worldPos = ConvertNormalizedPosToWorldPos( GetMapNormalizedAimCoordinate() )
 				GetLocalClientPlayer().ClientCommand( format( "GoToMapPoint %.3f %.3f %.3f", worldPos.x, worldPos.y, worldPos.z ) )
 				ScreenFlash( 0.0, 0.0, 0.0, 0.1, 0.5 )
-				EmitSoundOnEntity( GetLocalViewPlayer(), "UI_InGame_ShadowSquad_ShipIncoming" )
+				EmitSoundOnEntity( GetLocalViewPlayer(), "dropship_mp_epilogue_warpout" )
 				delaythread( 0.25 ) HideScoreboard()
 				return true
 

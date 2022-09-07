@@ -47,7 +47,7 @@ void function SV_CL_Init()
 	*/
 
 	#if SERVER
-		SvDemo_ConsistencyCheckString( "SV_CL_Init()" )
+	  SvDemo_ConsistencyCheckString( "SV_CL_Init()" )
 	#endif
 
 	ShEHI_LevelInit_Begin()
@@ -83,7 +83,7 @@ void function SV_CL_Init()
 	IonEnergy_Init()
 	Decoy_Init()
 	ShEHI_LevelInit_End()
-	MpWeaponFragDrone_Init()
+
 	ClientSidePickups_Init()
 	GrappleWeaponInit()
 	ShInfoCords_Init()
@@ -139,7 +139,7 @@ void function SV_CL_Init()
 	GameMode_RunSharedInits()
 	DamageHistoryInit()
 	ShPersistentData_LevelInit_Finish()
-
+	
 	ShWeaponRack_Init()
 
 
@@ -151,7 +151,7 @@ void function SV_CL_Init()
 	SURVIVAL_LootActions_InitShared()
 	SURVIVAL_LootTypes_InitShared()
 	SURVIVAL_EquipmentSlot_InitShared()
-	SURVIVAL_LootDistribution_InitShared()
+    SURVIVAL_LootDistribution_InitShared()
 	ShSurvivalTraining_Init()
 	FiringRangeGameMode_Init()
 	ShGas_Init()
@@ -164,9 +164,15 @@ void function SV_CL_Init()
 
 	Sh_Loot_Vault_Panel_Init()
 
+
 	ShLootDrones_Init()
 
+	if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" ){
 	ShLootRollers_Init()
+	} else if (GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k"){
+	ShFlyersDeathboxes_Init()
+	}	
+
 
 	CharacterSelectNewMenu_Init()
 
@@ -181,9 +187,15 @@ void function SV_CL_Init()
 
 	ShTutorial_Init()
 	Sh_PassiveVoices_Init()
+	#if(false)
+
+	#endif
+	#if(false)
+
+	#endif
 
 	#if CLIENT
-		Cl_DeathScreen_Init()
+		Cl_DeathScreen_Init() //
 	#endif
 
 	Sh_PersistentDamageLayer_Init()
@@ -291,8 +303,8 @@ void function Server_Init()
 	Bombardment_Init()
 	ThreatDetection_Init()
 	Staging_Area_Init()
-
-	SurvivalCommentary_Init()
+	if(GameRules_GetGameMode() != "custom_tdm"){
+	SurvivalCommentary_Init()}
 
 	GameMode_RunServerInits()
 
@@ -450,7 +462,9 @@ void function Shared_Lobby_Init()
 	ShPing_Init()
 	ShQuickchat_Init()
 	ShChallenges_LevelInit_PreStats()
+	#if(false)
 
+#endif
 	ShItems_LevelInit_Finish()
 	ShItemPerPlayerState_LevelInit()
 	ShLoadouts_LevelInit_Finish()

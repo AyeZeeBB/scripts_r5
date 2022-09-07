@@ -35,14 +35,25 @@ global function MusicPack_GetPortraitImage
 global function MusicPack_GetPortraitBlend
 #endif
 
+#if SERVER
+#endif
+
 #if CLIENT
 global function ServerCallback_PlayMatchEndMusic
+#endif
+
+#if SERVER
+
 #endif
 
 struct FileStruct_LifetimeLevel
 {
 	LoadoutEntry&          musicPackSelectionSlot
 	table<ItemFlavor, int> musicPackFlavorSortOrdinalMap
+
+	#if SERVER
+
+    #endif
 }
 FileStruct_LifetimeLevel& fileLevel
 
@@ -121,7 +132,7 @@ ItemFlavor function GetMusicPackForPlayer( entity player )
 
 	ItemFlavor flav = LoadoutSlot_GetItemFlavor( ToEHI( player ), entry )
 
-	#if CLIENT
+	#if(CLIENT)
 	if ( !IsLobby() && ItemFlavor_IsTheRandom( flav ) )
 	{
 		int guid = expect int( GetEntityVar( player, "musicPackAssigned" ) )
@@ -138,7 +149,7 @@ ItemFlavor function GetMusicPackForPlayer( entity player )
 	}
 	#else
 	flav = __GetMusicPackForPlayer_RollTheRandom( player )
-	#endif // CLIENT
+	#endif //
 
 	return flav
 }
@@ -157,7 +168,7 @@ bool function GetMusicPackDefaultIsSelectedLoadout( entity player )
 }
 #endif
 
-#if CLIENT
+#if(CLIENT)
 ItemFlavor function GetCustomMusicPackForMode()
 {
 	ItemFlavor flav
@@ -350,7 +361,7 @@ void function ServerCallback_PlayMatchEndMusic()
 #if SERVER
 #endif
 
-#if SERVER || CLIENT || UI
+#if SERVER || CLIENT || UI 
 ItemFlavor function __GetMusicPackForPlayer_RollTheRandom( entity player )
 {
 	ItemFlavor music = WaitForMusicPackForPlayer( player )

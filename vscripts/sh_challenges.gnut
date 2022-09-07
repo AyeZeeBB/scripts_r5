@@ -27,6 +27,20 @@ global function Challenge_GetCharacterItemFlavors
 global function DoesPlayerHaveChallenge
 global function RegisterChallengeSource
 global function RegisterChallengeFromAsset
+
+
+
+#endif
+
+
+
+#if SERVER
+#endif
+
+#if SERVER
+#endif
+
+#if SERVER
 #endif
 
 #if CLIENT && R5DEV
@@ -80,7 +94,7 @@ global enum eChallengeTimeSpanKind
 	SEASON_WEEKLY_RECURRING,
 	EVENT,
 }
-#endif // SERVER || CLIENT || UI
+#endif
 
 
 #if UI
@@ -104,6 +118,7 @@ const string CHALLENGE_REROLL_SOUND = "UI_Menu_Challenge_ReRoll"
 ////////////////
 const bool CHALLENGES_DEBUG_PRINTS = false
 
+//
 const int MAX_UNOWNED_CHAR_CHALLENGE = 1
 const array<int> DAILY_CHALLEGE_SET = [ eChallegeDifficulty.EASY, eChallegeDifficulty.MEDIUM, eChallegeDifficulty.HARD ]
 const int NUM_DAILY_CHALLENGES = 3 //
@@ -114,23 +129,29 @@ const int NUM_CHALLENGE_BUFFER_FOR_EVENTS = 8
 const int NUM_CHALLENGES_MAX = (NUM_WEEKLY_CHALLENGES_MAX * NUM_CHALLENGE_WEEKS_MAX) + NUM_DAILY_CHALLENGES + NUM_CHALLENGE_BUFFER_FOR_EVENTS
 const int NUM_POST_GAME_CHALLENGES_MAX = 32
 
+
 #if SERVER || CLIENT || UI
 struct ChallengeState
 {
 	int         persistenceIdx = -1
 	ItemFlavor& flav
 }
+#endif
 
-// SERVER || CLIENT || UI
+
+#if SERVER || CLIENT || UI
 struct PlayerChallengesState
 {
 	table<ItemFlavor, ChallengeState>   challengeStateMap
 	array<ChallengeState ornull>        persistentArrayMirror
 }
+#endif
 
-// SERVER || CLIENT || UI
+
+#if SERVER || CLIENT || UI
 struct FileStruct_LifetimeLevel
 {
+	//
 	table<StatEntry, array<ItemFlavor> > statEntryChallengesMap
 	table<ItemFlavor, ItemFlavor>        challengeSourceMap
 	table<ItemFlavor, int>               challengeSortOrdinalMap
@@ -146,18 +167,20 @@ struct FileStruct_LifetimeLevel
 FileStruct_LifetimeLevel& fileLevel
 
 const array<int> REROLL_COSTS = [ 2, 5, 10 ]
+#endif
 
+#if SERVER || CLIENT || UI
 struct
 {
 	bool initialized = false
 } file
-#endif // SERVER || CLIENT || UI
+#endif
 
-////////////////////////
-////////////////////////
-//// Initialization ////
-////////////////////////
-////////////////////////
+/////////////////////////
+/////////////////////////
+//// Initialiszation ////
+/////////////////////////
+/////////////////////////
 #if SERVER || CLIENT || UI
 void function ShChallenges_LevelInit_PreStats()
 {
@@ -165,6 +188,10 @@ void function ShChallenges_LevelInit_PreStats()
 	fileLevel = newFileLevel
 
 	AddCallback_OnItemFlavorRegistered( eItemType.challenge, OnChallengeRegistered )
+
+	#if SERVER
+
+	#endif
 
 	#if SERVER || CLIENT
 		RegisterSignal( "ChallengeDataDidChange" )
@@ -265,7 +292,7 @@ void function ShChallenges_LevelInit_PostStats()
 }
 #endif
 
-#if SERVER || CLIENT || UI
+#if SERVER || CLIENT || UI 
 void function RegisterChallengeSource( ItemFlavor challengeFlav, ItemFlavor sourceFlav, int sortOrdinal )
 {
 	fileLevel.challengeSourceMap[challengeFlav] <- sourceFlav
@@ -273,12 +300,21 @@ void function RegisterChallengeSource( ItemFlavor challengeFlav, ItemFlavor sour
 }
 #endif
 
+#if SERVER
+#endif
+
+
 #if SERVER || CLIENT || UI
 void function OnChallengeRegistered( ItemFlavor challenge )
 {
-
+	//
 }
 #endif
+
+
+#if SERVER
+#endif
+
 
 #if CLIENT
 void function ServerToClient_AssignedChallengesDidChange()
@@ -289,6 +325,7 @@ void function ServerToClient_AssignedChallengesDidChange()
 	ServerToClient_ChallengeDataDidChange()
 }
 #endif
+
 
 #if UI
 void function ClientToUI_AssignedChallengesDidChange()
@@ -304,6 +341,7 @@ void function ServerToClient_ChallengeDataDidChange()
 	RunUIScript( "ClientToUI_ChallengeDataDidChange" )
 }
 #endif
+
 
 #if UI
 void function ClientToUI_ChallengeDataDidChange()
@@ -416,11 +454,12 @@ array<var> function GetLobbyChallengeButtons()
 }
 #endif
 
-///////////////////
-///////////////////
-//// Internals ////
-///////////////////
-///////////////////
+
+/////////////////////////
+/////////////////////////
+//// Internals       ////
+/////////////////////////
+/////////////////////////
 
 #if UI
 array<ChallengeGroupData> function GetPlayerChallengeGroupData( entity player )
@@ -455,6 +494,7 @@ array<ChallengeGroupData> function GetPlayerChallengeGroupData( entity player )
 }
 #endif
 
+
 #if UI
 array<ChallengeGroupData> function GetAllChallengeGroupData()
 {
@@ -479,6 +519,7 @@ array<ChallengeGroupData> function GetAllChallengeGroupData()
 }
 #endif
 
+
 #if UI
 array<ItemFlavor> function GetPinnedChallenges()
 {
@@ -494,6 +535,11 @@ array<ItemFlavor> function GetPinnedChallenges()
 	return pinnedChallenges
 }
 #endif
+
+
+#if SERVER
+#endif
+
 
 #if SERVER || CLIENT || UI
 PlayerChallengesState function GetPlayerChallengesState( entity player = null )
@@ -545,6 +591,53 @@ void function InitPlayerChallengesStateFromPersistence( entity player, PlayerCha
 	}
 }
 #endif
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
 
 #if CLIENT && R5DEV
 void function PrintAllChallenges()
@@ -1100,6 +1193,19 @@ bool function DoesPlayerHaveChallenge( entity player, ItemFlavor flavor )
 }
 #endif
 
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
+#if SERVER
+#endif
+
+
 #if SERVER || CLIENT || UI
 bool function IsChallengeTierComplete( entity player, ItemFlavor challenge, int tier )
 {
@@ -1110,6 +1216,11 @@ bool function IsChallengeTierComplete( entity player, ItemFlavor challenge, int 
 	return progress >= goalVal
 }
 #endif
+
+
+#if SERVER
+#endif
+
 
 #if SERVER || CLIENT || UI
 array<ItemFlavor> function GetAllChallenges()
@@ -1546,7 +1657,7 @@ bool function Challenge_ShouldUseStatMarker( ItemFlavor flavor, int tier )
 #endif
 
 
-#if SERVER || CLIENT || UI
+#if SERVER || CLIENT || UI 
 bool function Challenge_ShouldAddProgressFromPrevTier( ItemFlavor flavor, int tier )
 {
 	Assert( ItemFlavor_GetType( flavor ) == eItemType.challenge )
@@ -1621,7 +1732,7 @@ void function RefreshChallenges()
 #endif
 
 
-#if CLIENT || UI
+#if CLIENT || UI 
 asset function GetChallengeRewardIcon( ItemFlavor flavor )
 {
 	int itemType = ItemFlavor_GetType( flavor )

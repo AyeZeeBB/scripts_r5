@@ -169,7 +169,7 @@ void function GameModes_Init()
 	GameMode_AddScoreboardColumnData( gameMode, "#SCOREBOARD_DEATHS", PGS_DEATHS, 2 )
 	//GameMode_AddScoreboardColumnData( gameMode, "#SCOREBOARD_ASSISTS", PGS_ASSISTS, 2 )
 	GameMode_SetColor( gameMode, [212, 83, 152, 255] )
-
+	
 	gameMode = CUSTOM_CTF
 	GameMode_Create( gameMode )
 	GameMode_SetName( gameMode, "custom_ctf" )

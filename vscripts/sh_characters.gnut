@@ -30,7 +30,7 @@ global function GetStringArrayAvailableClassesForPlayer
 global function CharacterClass_ConsiderLegHitBoxAsTorso
 global function CharacterClass_GetMenuZoomOffset
 
-#if CLIENT || UI
+#if CLIENT || UI 
 global function GetCharacterButtonMapping
 global function GetCharacterButtonOrder
 #endif
@@ -94,11 +94,11 @@ FileStruct_LifetimeLevel& fileLevel
 
 table< ItemFlavor, array<int> > legHitBoxOverrides = {}
 
-////////////////////////
-////////////////////////
-//// Initialization ////
-////////////////////////
-////////////////////////
+/////////////////////////
+/////////////////////////
+//// Initialiszation ////
+/////////////////////////
+/////////////////////////
 #if SERVER || CLIENT || UI
 void function ShCharacters_LevelInit()
 {
@@ -516,7 +516,7 @@ int function SortByMenuButtonIndex( ItemFlavor a, ItemFlavor b )
 	return 0
 }
 #endif // CLIENT || UI
-#if SERVER || CLIENT
+#if(SERVER || CLIENT)
 int function GetPlayerSettingBaseHealth( entity player )
 {
 	return int( player.GetPlayerSettingFloat( "health" ) )

@@ -43,7 +43,7 @@ global enum eCommsMenuStyle
 
 	_count
 }
-Assert( eCommsMenuStyle._assertion_marker == 6 )
+Assert( eCommsMenuStyle._assertion_marker == 6 )    //
 
 global enum eChatPage
 {
@@ -1769,15 +1769,13 @@ void function ClientCommand_Quip( entity player, array<string> args )
 
 	PlayQuip( player, commsAction )
 }
-#endif // SERVER
-
-#if CLIENT
+#endif
+#if(CLIENT)
 void function SetHintTextOnHudElem( var hudElem, string text )
 {
 	RuiSetString( Hud_GetRui( hudElem ), "buttonText", Localize( text ) )
 }
-#endif // CLIENT
-
+#endif
 void function PlayQuip( entity player, int commsAction )
 {
 	switch ( commsAction )

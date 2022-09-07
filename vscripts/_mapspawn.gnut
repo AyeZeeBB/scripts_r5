@@ -157,10 +157,10 @@ global struct SvGlobals
 
 	bool roundBasedTeamScore_RoundReset         = true  // if true, reset team scores at the start of each round.
 	bool isInPilotGracePeriod                   = false // if true, all players will be allowed to switch loadouts.
-
+	
 	table<string, void functionref(entity,array<string>)> globalAnimEventTokenizeCallbacks
 	array<bool functionref( entity player, entity zipline, vector ziplineClosestPoint )> canUseZiplineCallbacks
-
+	
 	// r5 stuff
 	array<void functionref(entity, entity)> onPilotEmbarkingTitanCallbacks
 	array<void functionref(entity, entity)> onPlayerUsedOffhandCallbacks
@@ -175,7 +175,7 @@ void function CodeCallback_MapSpawn() // original script entry point
 {
 	ShWeapons_LevelInit()
 	//seterrorhandler(void function() {})
-	ScriptCompilerTest()
+	//ScriptCompilerTest()
 	LoadDiamond()
 	MapTriggers_Init()
 
@@ -206,7 +206,7 @@ void function CodeCallback_MapSpawn() // original script entry point
 	PrecacheModel( $"mdl/error.rmdl" ) // model used when no model is provided
 
 	PrecacheModel( $"mdl/Humans/class/medium/combat_dummie_medium.rmdl" )
-
+	PrecacheModel($"mdl/fx/ar_survival_radius_1x100.rmdl")
 	//Charms - todo: find a better way
 
 	PrecacheModel( $"mdl/props/charm/charm_fireball.rmdl" )
@@ -224,9 +224,7 @@ void function CodeCallback_MapSpawn() // original script entry point
 	PrecacheModel( $"mdl/props/charm/charm_nessy_ghost.rmdl" )
 	PrecacheModel( $"mdl/props/charm/charm_clown.rmdl" )
 	PrecacheModel( $"mdl/props/charm/charm_witch.rmdl" )
-
-	//Lobby Models
-
+	
 	PrecacheModel( $"mdl/robots/drone_frag/drone_frag.rmdl" )
 	PrecacheModel( $"mdl/vehicle/droppod_fireteam/droppod_fireteam.rmdl" )
 	PrecacheModel( $"mdl/vehicle/droppod_loot/droppod_loot_LL_holo.rmdl" )
@@ -235,8 +233,7 @@ void function CodeCallback_MapSpawn() // original script entry point
 	PrecacheModel( $"mdl/menu/coin.rmdl" )
 	PrecacheModel( $"mdl/currency/crafting/currency_crafting_epic.rmdl" )
 
-	//Weapons
-
+	
 	PrecacheWeapon( $"mp_weapon_melee_survival" )
 	PrecacheWeapon( $"mp_weapon_mdlspawner" )
 	PrecacheWeapon( $"mp_weapon_alternator_smg" )
@@ -279,6 +276,7 @@ void function CodeCallback_MapSpawn() // original script entry point
 	PrecacheWeapon( $"mp_weapon_rspn101" )
 	PrecacheWeapon( $"mp_weapon_defender" )
 	PrecacheWeapon( $"mp_weapon_jump_pad" )
+	PrecacheWeapon( $"mp_weapon_smart_pistol" ) //TODO: Fix This
 	PrecacheWeapon( $"mp_weapon_grenade_creeping_bombardment" )
 	PrecacheWeapon( $"mp_weapon_grenade_defensive_bombardment" )
 	PrecacheWeapon( $"mp_weapon_grenade_sonar" )
@@ -286,56 +284,47 @@ void function CodeCallback_MapSpawn() // original script entry point
 	PrecacheWeapon( $"mp_weapon_deployable_cover" )
 	PrecacheWeapon( $"melee_data_knife" )
 	PrecacheWeapon( $"mp_weapon_volt_smg" )
-	PrecacheWeapon( $"mp_weapon_frag_drone" )
+	
 
-	//if ( GetMapName() == "mp_rr_canyonlands_staging" ) //Precache NPC Weapons For Firing Range
-	{
-		PrecacheWeapon( $"npc_weapon_energy_shotgun" )
-		PrecacheWeapon( $"npc_weapon_hemlok" )
-		PrecacheWeapon( $"npc_weapon_lstar" )
-	}
-
+	
 	printl( "Code Script: _mapspawn" )
-
 	SV_CL_Shared_Init()
 	ClientCommands_Init()
+
 }
 
 var function CodeCallback_ClientCommand( entity player, array<string> args )
 {
-	if( !Dev_CommandLineHasParm( "-nodebugprints" ) )
-	{
-		printl( "############################" )
-		printl( "CodeCallback_ClientCommand() before" )
-		printl( "player = " + player )
-		printl( "args:" )
+	if(args[0] == "bhit") {
+		printl( "Player weapon hit" ) //avoid showing full shit for bhit
+		return false
+	}
+	
+		printl( "############ ClientCommand Code Callback" )
+		printl( "Player:" + player )
+		printl( "Args:" )
 		foreach( key, value in args )
 			printl( key + " : " + value )
-		printl( "############################" )
-	}
-
+		printl( "############ ClientCommand Code Callback" )
 
 	string commandString = args.remove( 0 )
 
 	//TODO: Track down Why VModEnable is being called from code?
 
 	//Assert( commandString in svGlobal.clientCommandCallbacks )
-	if (commandString in svGlobal.clientCommandCallbacksNew)
+	if(commandString in svGlobal.clientCommandCallbacksNew)
 	{
 		printt("CodeCallback_ClientCommand", commandString)
 		svGlobal.clientCommandCallbacksNew[ commandString ]( player, args )
 		return true
 	}
-
 	if ( commandString in svGlobal.clientCommandCallbacks  )
 	{
 		return svGlobal.clientCommandCallbacks[ commandString ]( player, args )
 	}
 	else
 	{
-		printl( "############################" )
-		printl( "CommandString: " + commandString  + " was not added via AddClientCommandCallback but is being called in CodeCallback_ClientCommand" )
-		printl( "############################" )
+		printl( "ALERT: " + commandString  + " isn't a client command but is being called in CodeCallback_ClientCommand." )
 		return false
 	}
 }
@@ -354,9 +343,9 @@ void function MapTriggers_Init()
 		case "mp_rr_arena_composite":
 		{
 			CreateWallTrigger( <5, 2587, -520> , 30000 , true)
+			// CreateWallTrigger( <0, 5600, -190> , 85 , true)
+			// CreateWallTrigger( <0, 5600, -240> , 120)
 			CreateWallTrigger( <5, 5379, 860>  )
-			//CreateWallTrigger( <0, 5600, -190> , 85 , true)
-			//CreateWallTrigger( <0, 5600, -240> , 120)
 			break
 		}
 		case "mp_rr_ashs_redemption":

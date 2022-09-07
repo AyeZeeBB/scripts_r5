@@ -131,6 +131,7 @@ void function InitWeaponScripts()
 	MpWeaponDefender_Init()
 	MpWeaponDmr_Init()
 	MpWeaponSmartPistol_Init()
+	//MpWeaponGuidedMissile_Init()
 	SonarGrenade_Init()
 	MpWeaponSniper_Init()
 	MpWeaponLSTAR_Init()
@@ -928,9 +929,6 @@ bool function ControlPanel_IsValidModel( entity controlPanel )
 bool function ControlPanel_CanUseFunction( entity playerUser, entity controlPanel )
 {
 	if ( Bleedout_IsBleedingOut( playerUser ) )
-		return false
-		
-	if ( !IsValid( playerUser ) )
 		return false
 
 	entity activeWeapon = playerUser.GetActiveWeapon( eActiveInventorySlot.mainHand )
@@ -2789,6 +2787,40 @@ void function __WarpInEffectShared( vector origin, vector angles, string sfx, fl
 		StartParticleEffectInWorld( fxIndex, origin, angles )
 	#else
 		entity fx = PlayFX( FX_GUNSHIP_CRASH_EXPLOSION_ENTRANCE, origin, angles )
+		fx.FXEnableRenderAlways()
+		fx.DisableHibernation()
+		if ( IsValid( vehicle ) )
+		{
+			fx.RemoveFromAllRealms()
+			fx.AddToOtherEntitysRealms( expect entity ( vehicle ) )
+		}
+	#endif //
+
+	wait sfxWait
+	EmitSoundAtPosition( TEAM_UNASSIGNED, origin, sfx )
+
+	wait totalTime - preWait - sfxWait
+}
+
+void function __WarpInDropPodEffectShared( vector origin, vector angles, string sfx, float preWaitOverride = -1.0, entity ornull vehicle = null )
+{
+	float preWait = 2.0
+	float sfxWait = 0.1
+	float totalTime = WARPINFXTIME
+
+	if ( sfx == "" )
+		sfx = "dropship_warpin"
+
+	if ( preWaitOverride >= 0.0 )
+		wait preWaitOverride
+	else
+		wait preWait  //this needs to go and the const for warpin fx time needs to change - but not this game - the intro system is too dependent on it
+
+	#if CLIENT
+		int fxIndex = GetParticleSystemIndex( FX_GUNSHIP_CRASH_EXPLOSION )
+		StartParticleEffectInWorld( fxIndex, origin, angles )
+	#else
+		entity fx = PlayFX( FX_GUNSHIP_CRASH_EXPLOSION, origin, angles )
 		fx.FXEnableRenderAlways()
 		fx.DisableHibernation()
 		if ( IsValid( vehicle ) )
@@ -5013,8 +5045,8 @@ array<entity> function GetFriendlySquadArrayForPlayer_AliveConnected( entity pla
 	{
 		if ( !IsAlive( player ) )
 			return []
-#if SERVER
-
+		#if SERVER
+		
 		// if (teamsWithPlayersAlive.len() == 0)
 		// {
 		// 	teamsWithPlayersAlive.append( team )
@@ -5027,7 +5059,7 @@ array<entity> function GetFriendlySquadArrayForPlayer_AliveConnected( entity pla
 		// 		teamFound = true
 		// }
 
-#endif
+	#endif
 		return [player]
 	}
 
