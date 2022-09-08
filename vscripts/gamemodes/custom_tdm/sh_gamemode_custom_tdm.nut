@@ -6,6 +6,15 @@ globalize_all_functions
 global const NO_CHOICES = 2
 global const SCORE_GOAL_TO_WIN = 100
 
+global enum FlowStateGamemodes
+{
+	TDMFFA = 0
+	FIESTA = 1
+	GUNGAME = 2
+	SURF = 3
+	PROPHUNT = 4
+}
+
 global enum eTDMAnnounce
 {
 	NONE = 0
@@ -1498,22 +1507,22 @@ bool function FlowState_AutoreloadOnKillSecondary()                         { re
 bool function FlowState_RandomGuns()                         { return GetCurrentPlaylistVarBool("flowstateRandomGuns", false ) } 
 bool function FlowState_RandomTactical()                         { return GetCurrentPlaylistVarBool("flowstateRandomTactical", false ) } 
 bool function FlowState_RandomUltimate()                         { return GetCurrentPlaylistVarBool("flowstateRandomUltimate", false ) }
-bool function FlowState_RandomGunsEverydie() { return GetCurrentPlaylistVarBool("flowstateFiesta", false ) }
-bool function FlowState_FIESTAShieldsStreak() { return GetCurrentPlaylistVarBool("flowstateFiestaShieldsUpgrade", true ) } 
-bool function FlowState_FIESTADeathboxes() { return GetCurrentPlaylistVarBool("flowstateFiestaDeathboxes", true ) } 
 bool function FlowState_RandomGunsMetagame()                         { return GetCurrentPlaylistVarBool("flowstateRandomGunsMetagame", false ) }
 bool function FlowState_KillshotEnabled()                         { return GetCurrentPlaylistVarBool("flowstateKillshotEnabled", true ) }
 bool function FlowState_Droppods()                         { return GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) }
 bool function FlowState_ExtrashieldsEnabled()                         { return GetCurrentPlaylistVarBool("flowstateExtrashieldsEnabled", true ) }
 float function FlowState_ExtrashieldsSpawntime()                         { return GetCurrentPlaylistVarFloat("flowstateExtrashieldsSpawntime", 240 ) }
 float function FlowState_ExtrashieldValue()                         { return GetCurrentPlaylistVarFloat("flowstateExtrashieldValue", 150 ) }
-bool function FlowState_Gungame()                         { return GetCurrentPlaylistVarBool("flowstateGungame", false ) }
+
+bool function FlowState_GAMEMODE() { return GetCurrentPlaylistVarInt("flowstateGAMEMODE", 0) }
+bool function FlowState_FIESTAShieldsStreak() { return GetCurrentPlaylistVarBool("flowstateFiestaShieldsUpgrade", true ) } 
+bool function FlowState_FIESTADeathboxes() { return GetCurrentPlaylistVarBool("flowstateFiestaDeathboxes", true ) } 
 bool function FlowState_GungameRandomAbilities()                         { return GetCurrentPlaylistVarBool("flowstateGUNGAMERandomAbilities", false ) }
 bool function FlowState_SURF()                         { return GetCurrentPlaylistVarBool("flowstateSurf", false ) }
 int function FlowState_SURFRoundTime() { return GetCurrentPlaylistVarInt("flowstateSURFRoundtime", 800) }
 bool function FlowState_SURFLockPOI()                         { return GetCurrentPlaylistVarBool("flowstateSURFLockPOI", false ) } 
 int function FlowState_SURFLockedPOI() { return GetCurrentPlaylistVarInt("flowstateSURFLockeedPOI", 0) }
-bool function FlowState_PROPHUNT()                         { return GetCurrentPlaylistVarBool("flowstatePROPHUNT", false ) }
+
 
 bool function FlowState_EnableSkillTrainerByColombia()                         { return GetCurrentPlaylistVarBool("flowstate_Enable_SKILLTRAINER_By_Colombia", true ) }
 bool function FlowState_EnableCustomMapByBiscutz()                         { return GetCurrentPlaylistVarBool("flowstate_Enable_CUSTOMMAP_By_Biscutz", false ) }
