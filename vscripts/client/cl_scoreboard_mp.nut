@@ -91,7 +91,7 @@ void function ClScoreboardMp_Init()
 }
 
 void function ScoreboardFocus( entity player )
-{
+{ 
 	thread ShowScoreboardMP()
 	file.hasFocus = true
 }
@@ -315,7 +315,7 @@ void function ShowScoreboardMP()
 		return
 
 	printf("[SB] %s - %s\n", FUNC_NAME(), GameRules_GetGameMode())
-
+	
 	foreach( void functionref() callbackFunc in file.scoreboardCallbacks_OnShowing)
 		callbackFunc()
 
@@ -381,6 +381,7 @@ void function ShowScoreboardMP()
 
 	file.scoreboard.Show()
 
+	//WHY THE FUCK DID THIS BREAK THE SCOREBOARD - AyeZeeBB
 	ScoreboardFadeIn()
 
 	int maxPlayerDisplaySlots = GetNumPlayersToDisplayAsATeam()

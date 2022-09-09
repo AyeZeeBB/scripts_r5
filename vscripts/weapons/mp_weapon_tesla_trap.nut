@@ -418,6 +418,9 @@ var function OnWeaponPrimaryAttack_weapon_tesla_trap( entity weapon, WeaponPrima
 		return 0
 	}
 
+	#if SERVER
+	#endif
+
 	PlayerUsedOffhand( ownerPlayer, weapon, true, null, {pos = placementInfo.origin} )
 
 	if ( IsValid( placementInfo.snapTo ) )
@@ -432,6 +435,7 @@ var function OnWeaponPrimaryAttack_weapon_tesla_trap( entity weapon, WeaponPrima
 
 		return 0
 	}
+
 	else
 		printf("aaaaaaa")
 		#if SERVER		

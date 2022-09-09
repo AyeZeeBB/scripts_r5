@@ -93,10 +93,10 @@ global struct PingTableStruct // TODO: fix shared waypoints script, look at Burn
 global struct LootZone
 {
 	vector origin
-	float radius
-	float height
+    float radius
+    float height
 	int zoneClass
-	string ref
+    string ref
 }
 
 global struct ThreatEventCallbackData
@@ -342,7 +342,7 @@ global struct ServerEntityStruct
 	string enemyHighlight = ""
 	string burnReward = ""
 	int fd_roundDeployed = -1
-
+	
 	// r5 stuff
 	EHIScriptStruct ehiss
 	bool isBusy = false
@@ -394,14 +394,15 @@ global struct ServerEntityStruct
 	bool gravityOrbInteraction
 
 	bool shouldSpawnLoot = true
-
+	float lastGrappleTime
 	array<BurnDamageStack> burnDamageStacks
 	bool isBurning
-
-	float lastGrappleTime
-
+	
 	//Trophy Structs
 	float pylonhealth
+	
+	//Flyers easteregg
+	entity ParentedPlayerToFlyer
 }
 
 global struct MeritData
@@ -602,7 +603,7 @@ global struct ServerPlayerStruct
 	int turretArrayId = -1
 
 	float hotStreakTime = 0.0
-
+	
 	// extra stuff for apex
 	int skydiveDecoysFired = 0
 	bool isInExtendedUse = false
@@ -661,7 +662,7 @@ global struct ServerPlayerStruct
 	int zoneNoTouchStack
 	int currentZoneId
 	entity DEV_lastDroppedSurvivalWeaponProp
-
+	
 	int squadRank
 
 	float respawnChanceExpiryTime
@@ -669,6 +670,53 @@ global struct ServerPlayerStruct
 	float playerDamageDealt
 	int respawnsGiven
 	int revivesGiven
+		
+	//Flowstate 3.0
+	bool isPlayerSpawningInDroppod = false
+	float lastKillTimer
+	
+	//Flyers Easteregg by Colombia
+	bool isParentedToFlyer = false
+	entity ParentedFlyer
+	//Prophunt by Colombia
+	int PROPHUNT_Max3changes
+	bool PROPHUNT_isSpectatorDiedMidRound = false
+	bool PROPHUNT_DestroyProp = false
+	asset PROPHUNT_LastModel
+	
+	//By Endergreen
+	// This is for Octane's ability chatter
+	bool isSaidChatterOnStim = false
+	bool isSaidChatterOnJumpPad = false
+
+	// Amount of player downed enemy at one time
+	int downedEnemyAtOneTime = 0
+	bool isDownedEnemyRecently = false
+	//Strafer dummy challenge
+	int challengeName = 0
+	bool isChallengeActivated
+	//temp challenges data
+	int straferDummyKilledCount
+	int straferChallengeDamage
+	int straferCriticalShots
+	int straferShotsHit
+	int straferTotalShots
+	int straferShotsHitRecord = 0
+	int totalPossibleDamage
+	bool isNewBestScore = false
+	bool isRestartingLevel = false
+	int dummieKilled = 0
+	bool touchingTopTrigger = false
+}
+
+global struct ChallengeScore
+{
+	int straferDummyKilledCount
+	int straferChallengeDamage
+	int straferCriticalShots
+	int straferShotsHit
+	int straferTotalShots
+	float straferAccuracy
 }
 
 global struct ServerPlayerWaypoint

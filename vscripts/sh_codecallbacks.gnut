@@ -100,6 +100,7 @@ void function CodeCallbacksShared_Init()
 	#if CLIENT
 		RegisterConCommandTriggeredCallback( "-useAndReload", CancelDisembark )
 		RegisterConCommandTriggeredCallback( "-use", CancelDisembark )
+		RegisterConCommandTriggeredCallback( "+offhand4", CheckForAccelerants )
 	#endif
 
 	#if SERVER
@@ -274,7 +275,7 @@ void function AddCallback_PlayerClassActuallyChanged( void functionref( entity )
 
 void function CodeCallback_PlayerClassChanged( entity player, bool actualSettingsFileChanged )
 {
-	printt(FUNC_NAME(), player, "actualSettingsFileChanged", actualSettingsFileChanged)
+	//printt(FUNC_NAME(), player, "actualSettingsFileChanged", actualSettingsFileChanged)
 	if ( !IsValid( player ) )
 		return
 
@@ -289,7 +290,7 @@ void function CodeCallback_PlayerClassChanged( entity player, bool actualSetting
 		{
 			callbackFunc( player )
 		}
-		if ( IsAlive( player ) && !player.IsTitan() && GetCurrentPlaylistVarFloat( "pilot_health_multiplier", 0.0 ) != 0.0 )
+		if ( IsAlive( player ) && IsValid( player ) && GetCurrentPlaylistVarFloat( "pilot_health_multiplier", 0.0 ) != 0.0 )
 		{
 			float pilotHealthMultiplier = GetCurrentPlaylistVarFloat( "pilot_health_multiplier", 1.0 )
 			int pilotMaxHealth          = int( player.GetMaxHealth() * pilotHealthMultiplier )
@@ -314,14 +315,19 @@ void function CodeCallback_PlayerClassChanged( entity player, bool actualSetting
 		/*if ( IsWatchingReplay() )
 			UpdateKillReplayIconPosition()*/
 	#else
+		if(IsValid( player ) ){
 		player.kv.renderColor = "255 255 255 255"
 
+<<<<<<< Updated upstream
 		TakeAllPassives( player ) // take old player passives
 
 		InitDamageStates( player )
 		
 		if ( GameRules_GetGameMode() == "survival" )// Survey Beacon Minimap Icon
 			thread SetSurveyBaconMinimapVisibility( player )
+=======
+		InitDamageStates( player )}
+>>>>>>> Stashed changes
 	#endif
 
 	//if ( IsClient() && !player.IsTitan() )
@@ -433,6 +439,43 @@ void function CancelDisembark( entity player )
 		file.disembarkRUI = null
 	}
 }
+
+void function CheckForAccelerants( entity player )
+{
+	if(player != GetLocalClientPlayer()) return
+		
+	printt("Flowstate DEBUG - Trying to use ultimate.")
+	entity ultimateAbility = player.GetOffhandWeapon( OFFHAND_INVENTORY )
+	if ( !IsValid( ultimateAbility ) )
+		return
+
+	int ammoNow = ultimateAbility.GetWeaponPrimaryClipCount()
+	int ammoMax = ultimateAbility.GetWeaponPrimaryClipCountMax()
+	
+	if ( ammoNow < ammoMax )
+	{
+		//check for accelerants here
+		printt("Flowstate DEBUG - Check for accelerants here.")
+		array<ConsumableInventoryItem> playerInventory = SURVIVAL_GetPlayerInventory( player )
+
+		foreach ( invItem in playerInventory )
+		{	
+			if(invItem.type == 43)
+			{
+				Consumable_UseItemByType(player, 5)
+				SURVIVAL_RemoveFromPlayerInventory(player, "health_pickup_ultimate", 1)
+				printt("Flowstate DEBUG - Ultimate accelerant found! Recharging ultimate and removing item from inventory...")
+			} else {
+				printt("Flowstate DEBUG - Ultimate accelerant not found!")	
+			}
+		}
+
+	} else if ( ammoNow >= ammoMax )
+	{
+		printt("Flowstate DEBUG - Ultimate is ready we can't use accelerants.")
+	}
+}
+
 #endif
 
 /*
@@ -596,6 +639,8 @@ void function OnClientDisconnected( entity player )
 {
 	if ( player in file.currentPlayerTeamMap )
 		delete file.currentPlayerTeamMap[player]
+
+	UpdatePlayerCounts()
 }
 
 void function OnPlayerEntityChangedTeam( entity player )

@@ -81,8 +81,8 @@ struct
 	bool mapZonesInitialized = false
 	var mapZonesDataTable
 	table<int, int> calculatedZoneTiers
-	vector hotZoneOrigin
-	float hotZoneRadius
+    vector hotZoneOrigin
+    float hotZoneRadius
 } file
 
 const int INVALID_ZONE_ID = -1
@@ -590,6 +590,8 @@ void function OnPlayerEntersZone( entity player, entity zoneTrigger )
 {
 	//string zoneName = expect string( zoneTrigger.kv.zone_name )
 	//Dev_PrintMessage( player, " ", zoneName, 4  )
+	
+	if(GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false )) return
 
 	int zoneId = zoneTrigger.e.triggerZoneId
 

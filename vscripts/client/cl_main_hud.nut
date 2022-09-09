@@ -27,14 +27,15 @@ global const VGUI_OPENING               = 3
 global const TEAM_ICON_IMC              = $"ui/scoreboard_imc_logo"
 global const TEAM_ICON_MILITIA          = $"ui/scoreboard_mcorp_logo"
 
+global bool isChatShow = false
+global string chatText = ""
+
 const float OFFHAND_ALERT_ICON_ANIMRATE = 0.35
 const float OFFHAND_ALERT_ICON_SCALE    = 4.5
 
 const bool ALWAYS_SHOW_BOOST_MOBILITY_BAR = true
 
 global string CHAT_TEXT
-
-
 struct HudVisibilityStatus
 {
 	bool mainHud

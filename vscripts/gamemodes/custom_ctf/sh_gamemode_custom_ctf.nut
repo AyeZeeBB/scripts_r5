@@ -195,7 +195,7 @@ void function Sh_CustomCTF_Init()
     switch(GetMapName())
     {
         case "mp_rr_canyonlands_staging":
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Firing Range",
                     [ // ringspots
@@ -228,7 +228,7 @@ void function Sh_CustomCTF_Init()
 
         case "mp_rr_aqueduct":
         case "mp_rr_aqueduct_night":
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Overflow",
                     [ // ringspots
@@ -257,7 +257,7 @@ void function Sh_CustomCTF_Init()
             break
 
         case "mp_rr_arena_composite":
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Drop Off",
                     [ // ringspots
@@ -287,7 +287,7 @@ void function Sh_CustomCTF_Init()
             break
 
         case "mp_rr_ashs_redemption":
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Ash's Redemption",
                     [ // ringspots
@@ -320,7 +320,7 @@ void function Sh_CustomCTF_Init()
         case "mp_rr_canyonlands_mu1":
         case "mp_rr_canyonlands_mu1_night":
         case "mp_rr_canyonlands_64k_x_64k":
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Artillery",
                     [ // ringspots
@@ -349,7 +349,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Airbase",
                     [ // ringspots
@@ -377,7 +377,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Relay",
                     [ // ringspots
@@ -405,7 +405,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Wetlands",
                     [ // ringspots
@@ -433,7 +433,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Repulsor",
                     [ // ringspots
@@ -461,7 +461,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Skull Town",
                     [ // ringspots
@@ -489,7 +489,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Tunnel",
                     [ // ringspots
@@ -516,7 +516,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Watch Tower",
                     [ // ringspots
@@ -547,7 +547,7 @@ void function Sh_CustomCTF_Init()
 
         case "mp_rr_desertlands_64k_x_64k":
         case "mp_rr_desertlands_64k_x_64k_nx":
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Overlook",
                     [ // ringspots
@@ -575,7 +575,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Refinery",
                     [ // ringspots
@@ -602,7 +602,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Capitol City",
                     [ // ringspots
@@ -629,7 +629,7 @@ void function Sh_CustomCTF_Init()
                 )
             )
 
-            Shared_RegisterLocation(
+            Shared_RegisterLocationCTF(
                 NewCTFLocationSettings(
                     "Sorting Factory",
                     [ // ringspots
@@ -693,7 +693,7 @@ LocationSettingsCTF function NewCTFLocationSettings(string name, array < LocPair
 }
 
 
-void function Shared_RegisterLocation(LocationSettingsCTF locationSettings)
+void function Shared_RegisterLocationCTF(LocationSettingsCTF locationSettings)
 {
     #if SERVER
     _CTFRegisterLocation(locationSettings)

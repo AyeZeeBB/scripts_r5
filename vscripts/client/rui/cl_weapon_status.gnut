@@ -28,8 +28,8 @@ global function GetUltimateWeaponState
 global enum eUltimateState
 {
 	CHARGING    // weapon is counting down
-	READY       // ready to be used - pulling out the grenade would still keep it in this state since it can be aborted.
-	ACTIVE      // weapon has been activated
+	READY        // ready to be used - pulling out the grenade would still keep it in this state since it can be aborted.
+	ACTIVE        // weapon has been activated
 }
 
 struct
@@ -425,8 +425,8 @@ void function UpdateRUIWeaponData( entity player, var rui, entity weapon, int ta
 
 			vector ammoColor  = SrgbToLinear( <0.5, 0.5, 0.5> )
 			asset ammoIcon = weaponData.fakeAmmoIcon == $"" ? $"rui/hud/gametype_icons/survival/sur_ammo_unique" : weaponData.fakeAmmoIcon
-			bool isLegendary = weaponData.tier >= 4
-
+			bool isLegendary = weaponData.tier == 4
+			bool isCPWeapon = weaponData.tier >= 5
 			if ( weaponData.ammoType != "" )
 			{
 				LootData ammoData = SURVIVAL_Loot_GetLootDataByRef( weaponData.ammoType )
@@ -443,7 +443,13 @@ void function UpdateRUIWeaponData( entity player, var rui, entity weapon, int ta
 			{
 				ammoColor = SrgbToLinear( AMMO_LEGENDARY_COLOR )
 			}
-
+			
+			if ( isCPWeapon )
+			{
+				ammoColor = SrgbToLinear( <255, 10, 10> / 255.0 )
+				ammoIcon = $""
+			}
+			
 			RuiSetFloat3( rui, "ammoColorTab" + tabIndex, ammoColor )
 			if ( selected )
 			{
@@ -463,8 +469,24 @@ void function UpdateRUIWeaponData( entity player, var rui, entity weapon, int ta
 			RuiSetFloat3( rui, "ammoColor", <0.0, 0.0, 0.0> )
 		}
 	}
+	if(RGB_HUD)
+		thread RGBRui(rui)
 }
 
+void function RGBRui(var rui)
+{
+	entity player = GetLocalClientPlayer()
+	while(RGB_HUD)
+	{
+		int randomr = RandomInt(255)
+		int randomg = RandomInt(255) 
+		int randomb = RandomInt(255)	
+		RuiSetFloat3( rui, "ammoColor", SrgbToLinear( <randomr, randomg, randomb> / 255.0 ))
+		RuiSetFloat3( rui, "ammoColorTab0", SrgbToLinear( <randomr, randomg, randomb> / 255.0 ))
+		RuiSetFloat3( rui, "ammoColorTab1", SrgbToLinear( <randomr, randomg, randomb> / 255.0 ))
+		wait 0.1
+	}
+}
 
 void function PrimaryWeapon_UpdateFireSelectHUD( entity weapon )
 {

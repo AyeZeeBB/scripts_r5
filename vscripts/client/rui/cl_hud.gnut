@@ -250,11 +250,40 @@ void function DamageFlyout( float damageAmount, vector damagePosition, entity vi
 		LootData shieldData = EquipmentSlot_GetEquippedLootDataForSlot( victim, "armor" )
 		shieldIcon = shieldData.hudIcon
 		shieldLevel = shieldData.tier//GetArmorLevelFromDamageFlags( damageFlags )
+		
+		if( victim.GetShieldHealth() > 100 ) {
+			shieldLevel = 5
+		}
 	}
 	
 	if ( victim.IsPlayer() && isShadowShot )
 	{
 		//
+	}
+
+	if ( !victim.IsPlayer() && isShieldShot) //props shield bleedtrough visuals
+	{
+		if(victim.e.firsttime){			
+			if( victim.GetShieldHealth() <= 50 ){
+			victim.e.shieldTier = 1
+			}
+			else if( victim.GetShieldHealth() > 50 && victim.GetShieldHealth() <= 75 ) {
+			victim.e.shieldTier = 2
+			} else if( victim.GetShieldHealth() > 75 && victim.GetShieldHealth() <= 100  ) {
+			victim.e.shieldTier = 3
+			} else if( victim.GetShieldHealth() > 100 ) {
+			victim.e.shieldTier = 5
+			}
+			victim.e.firsttime = false
+		}
+		shieldIcon = $"rui/hud/loot/loot_armor_3"
+		shieldLevel = victim.e.shieldTier
+	}
+	
+	if ( !victim.IsPlayer() && victim.GetShieldHealth() == 0)
+	{
+		shieldIcon = $""
+		shieldLevel = 0
 	}
 	
 	if ( !victim.IsPlayer() && (isKOShieldShot || hitType == eHitType.VORTEX) )
@@ -308,7 +337,7 @@ void function DamageFlyout( float damageAmount, vector damagePosition, entity vi
 		}
 	}
 
-	if ( ShouldShowProjectileHitDot( damageType, weapon ) )
+	if ( ShouldShowProjectileHitDot( damageType, weapon ) || GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false ) && ENABLE_HIT_DOT)
 	{
 		var hitDotRui = RuiCreate( $"ui/projectile_hit_dot.rpak", clGlobal.topoFullScreen, RUI_DRAW_HUD, 0 )
 		RuiSetResolutionToScreenSize( hitDotRui )

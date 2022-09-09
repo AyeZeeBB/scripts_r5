@@ -404,6 +404,10 @@ void function SURVIVAL_RunArenaDeathField()
 
 	DeathFieldData data = file.deathFieldData
 	vector lastCenter   = file.deathFieldStages[file.deathFieldStartStage].endPos
+	
+	if(GetCurrentPlaylistVarBool( "dummies_horde_enabled", false ))
+		lastCenter   = <gp()[0].GetOrigin().x, gp()[0].GetOrigin().y, 0>
+	
 	data.center = lastCenter
 	data.nextCenter = lastCenter
 
@@ -591,7 +595,10 @@ void function SURVIVAL_RunArenaDeathField()
 		{
 			DeathFieldStageData nextStage = file.deathFieldStages[deathFieldStage + 1]
 			float frac                    = 1.0 - (nextStage.endRadius / stage.endRadius)
-			data.nextCenter = nextStage.endPos // GetRandomCenter( data.center, 0, data.currentRadius * frac )
+			if(GetCurrentPlaylistVarBool( "dummies_horde_enabled", false ))
+				data.nextCenter = GetRandomCenter( data.center, 0, data.currentRadius * frac )
+			else
+				data.nextCenter = nextStage.endPos // GetRandomCenter( data.center, 0, data.currentRadius * frac )
 		}
 
 		if ( data.currentRadius < 600 )
@@ -931,10 +938,10 @@ vector function GetFinalDeathFieldLocation()
         }
 			
 	}
-	vector lootLocation  = SURVIVAL_GetClosestValidCircleEndLocation( endPoint )
+	vector finalLocation  = SURVIVAL_GetClosestValidCircleEndLocation( endPoint )
 	//DebugDrawLine( <endPoint.x, endPoint.y, 0>, <lootLocation.x, lootLocation.y, 0>, 0,255,0, true, 100.0 )
-	vector finalLocation = GetClosestEndZonePoint( lootLocation ).origin
-    //TODO: Needs more testing
+	//vector finalLocation = GetClosestEndZonePoint( lootLocation ).origin
+    //can't call above func because no navmesh
 	//DebugDrawLine( <lootLocation.x, lootLocation.y, 0>, <finalLocation.x, finalLocation.y, 0>, 0,0,255, true, 100.0 )
 	return finalLocation
 }

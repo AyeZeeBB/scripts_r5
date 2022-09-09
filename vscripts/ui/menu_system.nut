@@ -16,7 +16,7 @@ struct ButtonData
 struct
 {
 	var                    menu
-
+	var						panel
 	table<var, array<var> >            buttons
 	table<var, array<ButtonData> > buttonDatas
 
@@ -30,8 +30,12 @@ struct
 	table<var, ButtonData > changeCharacterButtonData
 	table<var, ButtonData > friendlyFireButtonData
 	table<var, ButtonData > thirdPersonButtonData
+<<<<<<< Updated upstream
 	table<var, ButtonData > endmatchButtonData
 
+=======
+	table<var, ButtonData > ExitChallengeButtonData
+>>>>>>> Stashed changes
 	InputDef& qaFooter
 } file
 
@@ -86,6 +90,11 @@ void function ToggleThirdPerson()
 	ClientCommand( "ToggleThirdPerson" )
 }
 
+void function SignalExitChallenge()
+{
+	RunClientScript("ExitChallengeClient")
+}
+
 void function InitSystemPanel( var panel )
 {
 	var menu = Hud_GetParent( panel )
@@ -112,19 +121,23 @@ void function InitSystemPanel( var panel )
 	file.changeCharacterButtonData[ panel ] <- clone data
 	file.friendlyFireButtonData[ panel ] <- clone data
 	file.thirdPersonButtonData[ panel ] <- clone data
+<<<<<<< Updated upstream
 	file.endmatchButtonData[ panel ] <- clone data
+=======
+	file.ExitChallengeButtonData[ panel ] <- clone data
+	
+	file.ExitChallengeButtonData[ panel ].label = "FINISH CHALLENGE"
+	file.ExitChallengeButtonData[ panel ].activateFunc = SignalExitChallenge
+>>>>>>> Stashed changes
 
 	file.settingsButtonData[ panel ].label = "#SETTINGS"
 	file.settingsButtonData[ panel ].activateFunc = OpenSettingsMenu
-
+	
 	file.leaveMatchButtonData[ panel ].label = "#LEAVE_MATCH"
 	file.leaveMatchButtonData[ panel ].activateFunc = LeaveDialog
 
 	file.exitButtonData[ panel ].label = "#EXIT_TO_DESKTOP"
 	file.exitButtonData[ panel ].activateFunc = OpenConfirmExitToDesktopDialog
-
-	file.lobbyReturnButtonData[ panel ].label = "#RETURN_TO_LOBBY"
-	file.lobbyReturnButtonData[ panel ].activateFunc = LeaveDialog
 
 	file.leavePartyData[ panel ].label = "#LEAVE_PARTY"
 	file.leavePartyData[ panel ].activateFunc = LeavePartyDialog
@@ -163,6 +176,13 @@ void function OnSystemMenu_Open()
 
 void function UpdateSystemPanel( var panel )
 {
+	//temp workaround, not the best place for this tbh
+	if(IsConnected() && !GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false ))
+		file.lobbyReturnButtonData[ panel ].label = "#RETURN_TO_LOBBY"
+	else if(IsConnected() && GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false ))
+		file.lobbyReturnButtonData[ panel ].label = "EXIT AIM TRAINER"
+	file.lobbyReturnButtonData[ panel ].activateFunc = LeaveDialog
+
 	foreach ( index, button in file.buttons[ panel ] )
 		SetButtonData( panel, index, file.nullButtonData[ panel ] )
 
@@ -174,14 +194,20 @@ void function UpdateSystemPanel( var panel )
 		SetCursorPosition( <1920.0 * 0.5, 1080.0 * 0.5, 0> )
 
 		SetButtonData( panel, buttonIndex++, file.settingsButtonData[ panel ] )
+		if(!GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false ))
 		{
 			if ( IsSurvivalTraining() || IsFiringRangeGameMode() )
 				SetButtonData( panel, buttonIndex++, file.lobbyReturnButtonData[ panel ] )
 			else
 				SetButtonData( panel, buttonIndex++, file.leaveMatchButtonData[ panel ] )
+		} else
+		{
+			if(ISAIMTRAINER)
+				SetButtonData( panel, buttonIndex++, file.lobbyReturnButtonData[ panel ] )
+			else
+				SetButtonData( panel, buttonIndex++, file.ExitChallengeButtonData[ panel ] )
 		}
-
-		if ( IsFiringRangeGameMode() )
+		if ( IsFiringRangeGameMode() && !GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false ))
 		{
 			SetButtonData( panel, buttonIndex++, file.changeCharacterButtonData[ panel ] )
 		//	SetButtonData( panel, buttonIndex++, file.thirdPersonButtonData[ panel ] )
@@ -229,7 +255,10 @@ void function UpdateSystemPanel( var panel )
 	}
 
 	var dataCenterElem = Hud_GetChild( panel, "DataCenter" )
-	Hud_SetText( dataCenterElem, Localize( "#SYSTEM_DATACENTER", GetDatacenterName(), GetDatacenterPing() ) )
+	if(GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false ))
+		Hud_SetText( dataCenterElem, "Flowstate Aim Trainer by @CafeFPS")
+	else
+		Hud_SetText( dataCenterElem, Localize( "#SYSTEM_DATACENTER", GetDatacenterName(), GetDatacenterPing() ) )
 }
 
 void function SetButtonData( var panel, int buttonIndex, ButtonData buttonData )
@@ -248,6 +277,10 @@ void function SetButtonData( var panel, int buttonIndex, ButtonData buttonData )
 
 void function OnSystemMenu_Close()
 {
+	if(ISAIMTRAINER && IsConnected() && GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false )){
+		CloseAllMenus()
+		RunClientScript("ServerCallback_OpenFRChallengesMainMenu", PlayerKillsForChallengesUI)
+	}
 }
 
 
@@ -255,6 +288,10 @@ void function OnSystemMenu_NavigateBack()
 {
 	Assert( GetActiveMenu() == file.menu )
 	CloseActiveMenu()
+	if(ISAIMTRAINER && IsConnected() && GetCurrentPlaylistVarBool( "firingrange_aimtrainerbycolombia", false )){
+		CloseAllMenus()
+		RunClientScript("ServerCallback_OpenFRChallengesMainMenu", PlayerKillsForChallengesUI)
+	}
 }
 
 

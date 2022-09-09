@@ -7,6 +7,8 @@ global function ServerCallback_TDM_PlayerKilled
 
 global function Cl_RegisterLocation
 
+bool isFuncRegister = false
+
 struct {
 
     LocationSettings &selectedLocation
@@ -19,6 +21,7 @@ struct {
 
 void function Cl_CustomTDM_Init()
 {
+thread ChatEvent_Handler()
 }
 
 void function Cl_RegisterLocation(LocationSettings locationSettings)
@@ -26,6 +29,28 @@ void function Cl_RegisterLocation(LocationSettings locationSettings)
     file.locationSettings.append(locationSettings)
 }
 
+void function ChatEvent_Handler()
+{
+	while(true)
+	{
+		if(isChatShow && !isFuncRegister)
+		{
+			RegisterButtonPressedCallback(KEY_ENTER, SendChat);
+			isFuncRegister = true
+		}
+		else if(!isChatShow && isFuncRegister)
+		{
+			DeregisterButtonPressedCallback(KEY_ENTER, SendChat)
+			isFuncRegister = false
+		}
+		wait 0.5
+	}
+	
+}
+void function SendChat(var button)
+{
+	GetLocalClientPlayer().ClientCommand(chatText)
+}
 
 void function MakeScoreRUI()
 {
@@ -37,7 +62,7 @@ void function MakeScoreRUI()
     clGlobal.levelEnt.EndSignal( "CloseScoreRUI" )
 
     UISize screenSize = GetScreenSize()
-    var screenAlignmentTopo = RuiTopology_CreatePlane( <( screenSize.width * 0.25),( screenSize.height * 0.31 ), 0>, <float( screenSize.width ), 0, 0>, <0, float( screenSize.height ), 0>, false )
+    var screenAlignmentTopo = RuiTopology_CreatePlane( <( screenSize.width * 0.20),( screenSize.height * 0.31 ), 0>, <float( screenSize.width ), 0, 0>, <0, float( screenSize.height ), 0>, false )
     var rui = RuiCreate( $"ui/announcement_quick_right.rpak", screenAlignmentTopo, RUI_DRAW_HUD, RUI_SORT_SCREENFADE + 1 )
     
     RuiSetGameTime( rui, "startTime", Time() )
@@ -75,15 +100,8 @@ void function ServerCallback_TDM_DoAnnouncement(float duration, int type)
         case eTDMAnnounce.VOTING_PHASE:
         {
             clGlobal.levelEnt.Signal( "CloseScoreRUI" )
-				message = "Welcome To Team Deathmatch"
-				subtext = "Made by sal (score UI by shrugtal)"
-            break
-        }
-        case eTDMAnnounce.VOTING_PHASE_GG:
-        {
-            clGlobal.levelEnt.Signal( "CloseScoreRUI" )
-				message = "Welcome To Gun Game"
-				subtext = "Every time you kill someone, your weapon will replaced with a random weapon."
+            message = "Welcome To Team Deathmatch"
+            subtext = "Made by sal (score UI by shrugtal)"
             break
         }
         case eTDMAnnounce.MAP_FLYOVER:
@@ -115,14 +133,13 @@ void function ServerCallback_TDM_DoLocationIntroCutscene_Body()
     float desiredSpawnDuration = Deathmatch_GetIntroCutsceneSpawnDuration()
     float desireNoSpawns = Deathmatch_GetIntroCutsceneNumSpawns()
     
+
     entity player = GetLocalClientPlayer()
     
     if(!IsValid(player)) return
     
-	if ( IsGunGameMode() )
-		EmitSoundOnEntity( player, "music_tday_05_arenabattle" )
-	else
-		EmitSoundOnEntity( player, "music_skyway_04_smartpistolrun" )
+
+    EmitSoundOnEntity( player, "music_skyway_04_smartpistolrun" )
      
     float playerFOV = player.GetFOV()
     
@@ -135,6 +152,7 @@ void function ServerCallback_TDM_DoLocationIntroCutscene_Body()
 
     ////////////////////////////////////////////////////////////////////////////////
     ///////// EFFECTIVE CUTSCENE CODE START
+
 
     array<LocPair> cutsceneSpawns
     for(int i = 0; i < desireNoSpawns; i++)
@@ -162,15 +180,14 @@ void function ServerCallback_TDM_DoLocationIntroCutscene_Body()
 
     if(IsValid(player))
     {
-        if ( IsGunGameMode() )
-			FadeOutSoundOnEntity( player, "music_tday_05_arenabattle", 1 )
-		else
-			FadeOutSoundOnEntity( player, "music_skyway_04_smartpistolrun", 1 )
+        FadeOutSoundOnEntity( player, "music_skyway_04_smartpistolrun", 1 )
     }
     if(IsValid(camera))
     {
         camera.Destroy()
-    }    
+    }
+    
+    
 }
 
 void function ServerCallback_TDM_SetSelectedLocation(int sel)

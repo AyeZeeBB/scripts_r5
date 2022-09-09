@@ -229,8 +229,8 @@ void function OnDoorSpawned( entity door )
 			// Special legacy case for a specific door model
 			// Faster to do these experiments in script than to keep changing models in leveled and recompiling
 			// TODO: Should eventually delete
-			bool useBlockableDoors = GetCurrentPlaylistVarBool( "survival_force_blockable_doors", false )
-			bool useCodeDoors = GetCurrentPlaylistVarBool( "survival_force_code_doors", true )//TODO: FIX THIS ASAP
+			bool useBlockableDoors = GetCurrentPlaylistVarBool( "survival_force_blockable_doors", true )
+			bool useCodeDoors = GetCurrentPlaylistVarBool( "survival_force_code_doors", true )
 			if ( useCodeDoors )
 			{
 				bool makeLeftDoor  = false, makeRightDoor = false
@@ -1546,7 +1546,7 @@ void function BlockableDoor_OnDamage( entity door, var damageInfo )
 		EmitSoundOnEntity( door, "Door_Impact_Breach" )
 		EmitSoundOnEntity( door, "tone_jog_stress_3p" )
 		//EmitSoundOnEntity( door, "door_stop" )
-		if ( GetCurrentPlaylistVarBool( "blockable_door_regen_enabled", false ) )
+		if ( GetCurrentPlaylistVarBool( "blockable_door_regen_enabled", false ) || GetCurrentPlaylistVarBool( "flowstateDoorsRegen", false ))
 			thread BlockableDoor_ThreadedRegen( door )
 
 		if ( newHealth < door.GetMaxHealth() * 0.5 )

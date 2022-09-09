@@ -93,6 +93,8 @@ global struct ClientEntityStruct
 	bool gravityOrbInteraction
 	int cameraMaxRangeFXHandle = -1
 	float lastGrappleTime
+	bool firsttime = true
+	int shieldTier
 }
 
 
@@ -163,7 +165,8 @@ global struct ClientPlayerStruct
 global struct ClientAIStruct
 {
 	int gruntVoiceIndex = 0
-}
+	bool firsttime = true
+	int shieldTier}
 
 
 
