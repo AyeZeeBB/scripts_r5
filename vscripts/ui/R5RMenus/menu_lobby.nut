@@ -71,6 +71,7 @@ global table<string, string> playlisttoname = {
 	[ "wead" ] = "wead",
 	[ "custom_tdm" ] = "Team Deathmatch",
 	[ "custom_ctf" ] = "Capture The Flag",
+	[ "custom_1v1" ] = "1v1",
 	[ "tdm_gg" ] = "Gun Game",
 	[ "tdm_gg_double" ] = "Team Gun Game",
 	[ "survival_dev" ] = "Survival Dev",

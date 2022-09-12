@@ -164,6 +164,7 @@ void function RemoteFunctions_Init_Begin()
 			// CTF: Server to UI
 			Remote_RegisterUIFunction( "CloseCTFRespawnMenu" )
 			// END CTF
+		case CUSTOM_1V1:
 		case CUSTOM_TDM:
 		case MENUFALL:
 		case SURVIVAL:

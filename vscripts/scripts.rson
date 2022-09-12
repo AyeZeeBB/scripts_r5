@@ -899,6 +899,8 @@ Scripts:
 	gamemodes/custom_ctf/sh_gamemode_custom_ctf.nut
 	gamemodes/custom_ctf/custom_ctf_settings.nut
 
+	gamemodes/custom_1v1/sh_gamemode_custom_1v1.nut
+
 	lobby/lobbyvm/sh_lobbyvm.nut
 ]
 
@@ -909,6 +911,8 @@ Scripts:
 
 	gamemodes/custom_ctf/_gamemode_custom_ctf.nut
 
+	gamemodes/custom_1v1/_gamemode_custom_1v1.nut
+
 	lobby/lobbyvm/_lobbyvm.nut
 ]
 
@@ -918,6 +922,8 @@ Scripts:
 	gamemodes/custom_tdm/cl_gamemode_custom_tdm.nut
 
 	gamemodes/custom_ctf/cl_gamemode_custom_ctf.nut
+
+	gamemodes/custom_1v1/cl_gamemode_custom_1v1.nut
 
 	lobby/lobbyvm/cl_lobbyvm.nut
 ]
