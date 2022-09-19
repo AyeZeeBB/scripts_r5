@@ -130,6 +130,22 @@ void function Sh_CustomTDM_Init()
             )
         )
         break
+		
+	case "mp_rr_aqueduct":
+	case "mp_rr_aqueduct_night":
+        Shared_RegisterLocation(
+            NewLocationSettings(
+                "Overflow Work Area",
+                [
+					NewLocPair(<-3442, -4093, 347>, <0, -20, 0>),
+					NewLocPair(<2153, -6570, 456>, <0, 180, 0>),
+					NewLocPair(<4860, -4097, 347>, <0, -158, 0>),
+					NewLocPair(<-819, -6570, 456>, <0, 0, 0>)
+                ],
+                <0, 0, 1000>
+            )
+        )
+        break
 
 	case "mp_rr_canyonlands_mu1":
 	case "mp_rr_canyonlands_mu1_night":
@@ -307,6 +323,21 @@ void function Sh_CustomTDM_Init()
             )
         )
 
+        break
+
+		case "mp_rr_desertlands_64k_x_64k_tt":
+        Shared_RegisterLocation(
+            NewLocationSettings(
+                "Mirage Voyage",
+                [
+                    NewLocPair(<-25930, -3790, -2442>, <0, -37, 0>),
+					NewLocPair(<-22928, -5785, -2396>, <0, 147, 0>),
+                    NewLocPair(<-27364, -4969, -2681>, <0, -32, 0>),
+					NewLocPair(<-23150, -6776, -2879>, <0, 122, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
         break
 
         case "mp_rr_desertlands_64k_x_64k":

@@ -280,6 +280,9 @@ LocPair function _GetVotingLocation()
             return NewLocPair(<26794, -6241, -27479>, <0, 0, 0>)
         case "mp_rr_ashs_redemption"://our first custom tdm map
             return NewLocPair(<-20917, 5852, -26741>, <0, -90, 0>)
+		case "mp_rr_aqueduct"://our first ported map
+		case "mp_rr_aqueduct_night":
+            return NewLocPair(<703, -4379, 487>, <0, 90, 0>)
         case "mp_rr_canyonlands_64k_x_64k":
         case "mp_rr_canyonlands_mu1":
         case "mp_rr_canyonlands_mu1_night":
@@ -287,6 +290,8 @@ LocPair function _GetVotingLocation()
         case "mp_rr_desertlands_64k_x_64k":
         case "mp_rr_desertlands_64k_x_64k_nx":
                 return NewLocPair(<1763, 5463, -3145>, <5, -95, 0>)
+		case "mp_rr_desertlands_64k_x_64k_tt":
+                return NewLocPair(<-25197, -4278, -2138>, <0, -34, 0>)
         case "mp_rr_arena_composite":
                 return NewLocPair(<0, 4780, 220>, <0, -90, 0>)
         default:

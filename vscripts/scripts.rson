@@ -281,6 +281,9 @@ Scripts:
 	weapons/mp_weapon_lifeline_baton_primary.nut
 	weapons/melee_lifeline_baton.nut
 
+	weapons/mp_weapon_bolo_sword_primary.nut
+	weapons/melee_bolo_sword.nut
+
 
 	weapons/mp_weapon_shadow_squad_hands_primary.nut
 	weapons/melee_shadowsquad_hands.nut
@@ -794,15 +797,29 @@ Scripts:
 	ui/menu_about_game_mode.nut
 	ui/menu_reward_ceremony.nut
 	ui/menu_loadscreen_preview.nut
-
+	
+	//CTF
 	ui/CTFMenus/menu_ctf_respawn.nut
+	//FR Challenges
+	ui/FRChallenges/menu_frchallenges.nut
+	ui/FRChallenges/mainmenu_challenges.nut
+	ui/FRChallenges/mainmenu_history.nut
+	ui/FRChallenges/mainmenu_settings.nut
+	ui/FRChallenges/mainmenu_settings_weaponselector.nut
+	ui/FRChallenges/panel_buymenu1.nut
+	ui/FRChallenges/panel_buymenu2.nut
+	ui/FRChallenges/panel_buymenu3.nut
+	ui/FRChallenges/panel_buymenu4.nut
+	ui/FRChallenges/panel_buymenu5.nut
+
+	//KillReplay
 	ui/KillReplay/menu_killreplay.nut
 
 	//R5RUI
 	ui/R5RMenus/menu_main.nut
 	ui/R5RMenus/menu_lobby.nut
+	ui/R5RMenus/menu_private_match.nut
 	ui/R5RMenus/panel_home.nut
-	ui/R5RMenus/panel_createserver.nut
 	ui/R5RMenus/panel_serverbrowser.nut
 	ui/R5RMenus/panel_mainmenu.nut
 	ui/R5RMenus/panel_playlist.nut
@@ -895,6 +912,8 @@ Scripts:
 
 	gamemodes/custom_ctf/sh_gamemode_custom_ctf.nut
 	gamemodes/custom_ctf/custom_ctf_settings.nut
+	gamemodes/custom_aimtrainer/sh_aimtrainer.nut
+	lobby/lobbyvm/sh_lobbyvm.nut
 ]
 
 When: "SERVER"
@@ -903,6 +922,9 @@ Scripts:
 	gamemodes/custom_tdm/_gamemode_custom_tdm.nut
 
 	gamemodes/custom_ctf/_gamemode_custom_ctf.nut
+
+	gamemodes/custom_aimtrainer/_aimtrainer.nut
+	lobby/lobbyvm/_lobbyvm.nut
 ]
 
 When: "CLIENT"
@@ -911,6 +933,8 @@ Scripts:
 	gamemodes/custom_tdm/cl_gamemode_custom_tdm.nut
 
 	gamemodes/custom_ctf/cl_gamemode_custom_ctf.nut
+	gamemodes/custom_aimtrainer/cl_aimtrainer.nut
+	lobby/lobbyvm/cl_lobbyvm.nut
 ]
 
 

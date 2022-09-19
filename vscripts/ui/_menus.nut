@@ -221,6 +221,7 @@ void function UICodeCallback_ToggleInGameMenu()
 
 	var activeMenu = GetActiveMenu()
 	bool isLobby   = IsLobby()
+	string playlistName = GetCurrentPlaylistName()
 
 	if ( isLobby )
 	{
@@ -1048,10 +1049,12 @@ void function UpdateMenusOnConnectThread( string levelname )
 	Assert( GetActiveMenu() != null || uiGlobal.menuStack.len() == 0 )
 
 	bool isLobby = IsLobbyMapName( levelname )
+	string playlistName = GetCurrentPlaylistName()
 
 	if ( isLobby )
 	{
 		AdvanceMenu( GetMenu( "R5RLobbyMenu" ) )
+
 		UIMusicUpdate()
 
 		if ( IsFullyConnected() )
@@ -1518,20 +1521,44 @@ void function InitMenus()
 
 	var r5rlobbymenu = AddMenu( "R5RLobbyMenu", $"scripts/resource/ui/menus/R5R/lobbymenu.res", InitR5RLobbyMenu )
 	AddPanel( r5rlobbymenu, "R5RHomePanel", InitR5RHomePanel )
+	AddPanel( r5rlobbymenu, "R5RServerBrowserPanel", InitR5RServerBrowserPanel )
 	AddPanel( r5rlobbymenu, "R5RNamePanel", InitR5RNamePanel )
 	AddPanel( r5rlobbymenu, "R5RDescPanel", InitR5RDescPanel )
-	var createserverpanel = AddPanel( r5rlobbymenu, "R5RCreateServerPanel", InitR5RCreateServerPanel )
-	AddPanel( r5rlobbymenu, "R5RServerBrowserPanel", InitR5RServerBrowserPanel )
-	AddPanel( createserverpanel, "R5RPlaylistPanel", InitR5RPlaylistPanel )
-	AddPanel( createserverpanel, "R5RMapPanel", InitR5RMapPanel )
-	AddPanel( createserverpanel, "R5RVisPanel", InitR5RVisPanel )
+	AddPanel( r5rlobbymenu, "R5RKickPanel", InitR5RKickPanel )
+	AddPanel( r5rlobbymenu, "R5RStartingPanel", InitR5RStartingPanel )
+	AddPanel( r5rlobbymenu, "R5RConnectingPanel", InitR5RConnectingPanel )
+
+	var privatematchmenu = AddPanel( r5rlobbymenu, "R5RPrivateMatchPanel", InitR5RPrivateMatchMenu )
+	AddPanel( privatematchmenu, "R5RPlaylistPanel", InitR5RPlaylistPanel )
+	AddPanel( privatematchmenu, "R5RMapPanel", InitR5RMapPanel )
+	AddPanel( privatematchmenu, "R5RVisPanel", InitR5RVisPanel )
 	////////
 
 	//CTF UI
 	var controlmenu = AddMenu( "CTFRespawnMenu", $"scripts/resource/ui/menus/CTF/ctfrespawnmenu.menu", InitCTFRespawnMenu )
 	var ctfvotemenu = AddMenu( "CTFVoteMenu", $"scripts/resource/ui/menus/CTF/ctfvotemenu.menu", InitCTFVoteMenu )
 	////////
+	//AIM TRAINER
+	//Main Menu
+	AddMenu( "FRChallengesMainMenu", $"scripts/resource/ui/menus/FRChallenges/mainmenu_main.menu", InitFRChallengesMainMenu )
+	
+	//Settings
+	AddMenu( "FRChallengesSettings", $"scripts/resource/ui/menus/FRChallenges/mainmenu_settings.menu", InitFRChallengesSettings )
+	
+	//History
+	AddMenu( "FRChallengesHistory", $"scripts/resource/ui/menus/FRChallenges/mainmenu_history.menu", InitChallengesHistory )
+	
+	//Weapon Selector
+	var weaponselector = AddMenu( "FRChallengesSettingsWpnSelector", $"scripts/resource/ui/menus/FRChallenges/mainmenu_settings_weaponselector.menu", InitFRChallengesSettingsWpnSelector )
+	AddPanel( weaponselector, "BuyMenu1", InitArenasBuyPanel1 )
+	AddPanel( weaponselector, "BuyMenu2", InitArenasBuyPanel2 )
+	AddPanel( weaponselector, "BuyMenu3", InitArenasBuyPanel3 )
+	AddPanel( weaponselector, "BuyMenu4", InitArenasBuyPanel4 )
+	AddPanel( weaponselector, "BuyMenu5", InitArenasBuyPanel5 )
 
+	//results
+	AddMenu( "FRChallengesMenu", $"scripts/resource/ui/menus/FRChallenges/challenges_results.menu", InitFRChallengesResultsMenu ) //results
+	
 	//Custom KillReplayHud
 	var killreplayhud = AddMenu( "KillReplayHud", $"scripts/resource/ui/menus/KillReplay/replayhud.menu", InitKillReplayHud )
 	///////
