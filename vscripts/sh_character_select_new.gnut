@@ -25,6 +25,7 @@ global function UI_InitCharacterSelectNewMenu
 global function UI_RunCharacterSelect
 global function UI_CloseCharacterSelect
 global function ClientToUI_UpdateSquadMute
+global function ResetCharacterSelectAimTrainer
 #endif
 
 #if CLIENT
@@ -794,7 +795,6 @@ void function UI_OnCharacterSelectMenu_NavBack()
 		RunClientScript( "CloseCharacterSelectNewMenu" )
 		return
 	}
-
 	RunClientScript( "Client_TryUnlockCharacter" )
 }
 
@@ -805,6 +805,13 @@ void function UI_CloseCharacterSelect()
 		CloseAllMenus() //CloseActiveMenu()
 	else if ( IsMenuInMenuStack( fileForever.menu ) )
 		RemoveFromMenuStack( fileForever.menu )
+}
+
+void function ResetCharacterSelectAimTrainer()
+{
+	CloseAllMenus()
+	RunClientScript("ServerCallback_OpenFRChallengesSettings")
+	RunClientScript("ServerCallback_CoolCameraOnMenu")
 }
 #endif //UI
 
@@ -871,6 +878,11 @@ void function CloseCharacterSelectNewMenu()
 	fileLevel.menuEntsReady = false
 
 	OnCharacterSelectNewMenuClosed_RemoveCallbacks()
+	
+	if(GetCurrentPlaylistVarBool( "r5reloaded_aimtrainer", false ))
+	{
+		RunUIScript( "ResetCharacterSelectAimTrainer" )
+	}
 }
 
 void function OnCharacterSelectNewMenuClosed_RemoveCallbacks()
@@ -1111,7 +1123,7 @@ void function Client_UIScriptReset()
 	printt( "UI Script Reset" )
 	printt( "###############" )
 
-	if ( GetGameState() == eGameState.PickLoadout  || GetCurrentPlaylistVarBool( "character_reselect_enabled", false ))
+	if ( GetGameState() == eGameState.PickLoadout  || GetCurrentPlaylistVarInt( "character_reselect_enabled", eCharacterReselect.NONE ) > eCharacterReselect.NONE )
 		thread ReloadMenu()
 }
 
@@ -1119,13 +1131,13 @@ void function ReloadMenu()
 {
 	WaitFrame()
 
-	if ( GetGameState() != eGameState.PickLoadout || GetCurrentPlaylistVarBool( "character_reselect_enabled", false ))
+	if ( GetGameState() != eGameState.PickLoadout || GetCurrentPlaylistVarInt( "character_reselect_enabled", eCharacterReselect.NONE ) > eCharacterReselect.NONE )
 		return
 
 	CloseCharacterSelectNewMenu()
 	WaitFrame()
 
-	if ( GetGameState() != eGameState.PickLoadout || GetCurrentPlaylistVarBool( "character_reselect_enabled", false ))
+	if ( GetGameState() != eGameState.PickLoadout || GetCurrentPlaylistVarInt( "character_reselect_enabled", eCharacterReselect.NONE ) > eCharacterReselect.NONE )
 		return
 
 	OpenCharacterSelectNewMenu()
@@ -1158,7 +1170,7 @@ void function UpdateForFocusOnButtonIndex( int buttonIndex )
 		return
 
 	// If we have a character locked in we don't update the model
-	if ( GetLocalClientPlayer().GetPlayerNetBool( "hasLockedInCharacter" ) )
+	if ( !fileLevel.isBrowseMode && GetLocalClientPlayer().GetPlayerNetBool( "hasLockedInCharacter" ) )
 		return
 
 	foreach( func in file.Callbacks_OnCharacterFocused )
@@ -1218,7 +1230,7 @@ void function OnLoadoutButton_Activate( var button )
 		return
 
 	// We already have a character locked
-	if ( GetLocalClientPlayer().GetPlayerNetBool( "hasLockedInCharacter" ) )
+	if ( !fileLevel.isBrowseMode && GetLocalClientPlayer().GetPlayerNetBool( "hasLockedInCharacter" ) )
 		return
 
 	int buttonIndex      = fileLevel.characterButtons.find( button )

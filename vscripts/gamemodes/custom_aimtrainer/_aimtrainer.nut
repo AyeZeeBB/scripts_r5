@@ -84,7 +84,8 @@ void function _ChallengesByColombia_Init()
 	
 	//on weapon attack callback so we can calculate stats for live stats and results menu
 	AddCallback_OnWeaponAttack( OnWeaponAttackChallenges )
-		
+	AddCallback_OnClientConnected( StartFRChallenges )
+
 	//arc stars on damage callback for arc stars practice challenge
 	AddDamageCallbackSourceID( eDamageSourceId.damagedef_ticky_arc_blast, Arcstar_OnStick )
 	AddDamageCallbackSourceID( eDamageSourceId.mp_weapon_grenade_emp, Arcstar_OnStick )
@@ -101,7 +102,7 @@ void function _ChallengesByColombia_Init()
 	AddDeathCallback( "player", OnPlayerDeathCallback )
 	
 	//add basic aim trainer locations for maps //todo: move this to a datatable
-	if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+	if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" || GetMapName() == "mp_rr_desertlands_64k_x_64k_tt")
 	{
 		floorLocation = <-10020.1543, -8643.02832, 5189.92578>
 		onGroundLocationPos = <12891.2783, -2391.77124, -3121.60132>
@@ -137,8 +138,8 @@ void function _ChallengesByColombia_Init()
 
 void function StartFRChallenges(entity player)
 {
-	wait 1
-	if(!IsValid(player)) return
+	while( !IsValid( player ) )
+		WaitFrame()
 
 	Remote_CallFunction_NonReplay(player, "ServerCallback_SetDefaultMenuSettings")
 	Survival_SetInventoryEnabled( player, false )
@@ -146,9 +147,7 @@ void function StartFRChallenges(entity player)
 	player.FreezeControlsOnServer()
 	TakeAllWeapons(player)
 	Inventory_SetPlayerEquipment(player, "armor_pickup_lv1", "armor")
-    player.GiveWeapon( "mp_weapon_bolo_sword_primary", WEAPON_INVENTORY_SLOT_PRIMARY_2, [] )
-    player.GiveOffhandWeapon( "melee_bolo_sword", OFFHAND_MELEE, [] )
-	
+
 	player.GiveWeapon( "mp_weapon_wingman", WEAPON_INVENTORY_SLOT_PRIMARY_0, ["optic_cq_hcog_classic"] )
 	player.SetActiveWeaponBySlot(eActiveInventorySlot.mainHand, WEAPON_INVENTORY_SLOT_PRIMARY_0)
 	
@@ -1005,7 +1004,7 @@ void function ForceToBeInLiftForChallenge( entity player )
 	while(IsValid(player) && !player.p.isRestartingLevel)
 	{
 		player.SetVelocity(Vector(0,0,0))
-		wait 5
+		wait 5.5
 		foreach(entity dummy in ChallengesEntities.dummies)
 			if(IsValid(dummy)) dummy.Destroy()
 		ChallengesEntities.dummies.clear()
@@ -1139,7 +1138,7 @@ void function StartTileFrenzyChallenge(entity player)
 	}
 	WaitFrame()
 	player.SetOrigin(player.GetOrigin() + Vector(0,0,100))
-	ChallengesEntities.props.append(CreateFRProp( $"mdl/thunderdome/thunderdome_cage_ceiling_256x256_06.rmdl", player.GetOrigin(), <0,0,0>) )
+	ChallengesEntities.props.append(CreateFRProp( FIRINGRANGE_256x256_ASSET, player.GetOrigin(), <0,0,0>) )
 	PutEntityInSafeSpot( player, null, null, player.GetOrigin() + player.GetUpVector()*128, player.GetOrigin() )
 	locationsForTiles.randomize()
 	
@@ -2279,8 +2278,15 @@ thread OnPlayerDeathCallbackThread(player)
 void function OnPlayerDeathCallbackThread(entity player)
 {
 	entity weapon = player.GetNormalWeapon(WEAPON_INVENTORY_SLOT_PRIMARY_0)
-	array<string> mods = weapon.GetMods()
-	string weaponname = weapon.GetWeaponClassName()
+	array<string> mods
+	string weaponname
+	if( IsValid( weapon ) )
+	{
+		mods = weapon.GetMods()
+		weaponname = weapon.GetWeaponClassName()
+	} else {
+		weaponname = "mp_weapon_wingman"
+	}
 
 	wait 1
 
@@ -2327,7 +2333,7 @@ array<entity> function CreateFloorAtOrigin(vector origin, int width, int length)
 	{
 		for(j = x; j <= x + (width * 256); j += 256)
 		{
-			arr.append( CreateFRProp( $"mdl/thunderdome/thunderdome_cage_ceiling_256x256_06.rmdl", <j, i, z>, <0,0,0>) )
+			arr.append( CreateFRProp( FIRINGRANGE_256x256_ASSET, <j, i, z>, <0,0,0>) )
 		}
     }
 	return arr
@@ -2721,6 +2727,13 @@ bool function CC_MenuGiveAimTrainerWeapon( entity player, array<string> args )
 					if(args[4] != "." ) finalargs.append(args[4])
 					if(args[6] != "none") finalargs.append(args[6])
 						
+					weaponent = player.GiveWeapon( weapon, WEAPON_INVENTORY_SLOT_PRIMARY_0, finalargs)
+					break
+				case "marksman3":
+					if(args[1] != "none") finalargs.append(args[1])
+					if(args[3] != "none") finalargs.append(args[3])
+					if(args[6] != "none") finalargs.append(args[6])	
+					
 					weaponent = player.GiveWeapon( weapon, WEAPON_INVENTORY_SLOT_PRIMARY_0, finalargs)
 					break
 				case "sniper":
