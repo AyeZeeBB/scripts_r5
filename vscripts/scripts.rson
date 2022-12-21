@@ -162,6 +162,7 @@ Scripts:
 	_networkvars.gnut
 	_vscript.gnut
 	_init.gnut
+	_mapeditor.gnut
 	class/CPlayer.nut
 	sh_anim_windows.gnut
 	sh_anim_events.gnut
@@ -239,21 +240,26 @@ Scripts:
 	titan/sh_ion_energy.gnut
 	weapons/_arc_cannon.nut
 	weapons/_grenade.nut
+	weapons/mp_weapon_grenade_gravity.nut
 	weapons/_vortex.nut
 	weapons/_weapon_dialogue.nut
 	weapons/_weapon_utility.nut
 	weapons/_weapon_reactive_effects.gnut
+	weapons/mp_weapon_satchel.nut
 	weapons/mp_ability_cloak.nut
 	weapons/mp_ability_grapple.nut
 	weapons/mp_ability_holopilot.nut
 	weapons/mp_weapon_smart_pistol.nut
+	weapons/mp_weapon_mobile_hmg.nut
 	weapons/mp_weapon_mdlspawner.nut
+	weapons/mp_titanweapon_flightcore_rockets.nut
 
 
 	weapons/mp_ability_heal.nut
 	weapons/mp_ability_sonar.nut
 	weapons/mp_weapon_basic_bolt.nut
 	//weapons/mp_weapon_grenade_electric_smoke.nut
+	weapons/mp_weapon_throwingknife.nut
 	weapons/mp_weapon_defender.nut
 	weapons/mp_weapon_defender_sustained.nut
 	weapons/mp_weapon_deployable_cover.nut
@@ -267,6 +273,7 @@ Scripts:
 	weapons/mp_weapon_lmg.nut
 	weapons/mp_weapon_lstar.nut
 	weapons/mp_weapon_energy_ar.nut
+	weapons/mp_weapon_softball.nut
 	weapons/mp_weapon_rspn101.nut
 	weapons/mp_weapon_vinson.nut
 	weapons/mp_weapon_mastiff.nut
@@ -291,6 +298,7 @@ Scripts:
 
 	weapons/mp_weapon_shotgun.nut
 	weapons/mp_weapon_sniper.nut
+	weapons/mp_weapon_sentinel.nut
 	weapons/mp_weapon_thermite_grenade.nut
 	weapons/mp_weapon_zipline.nut
 	weapons/mp_weapon_alternator_smg.nut
@@ -944,4 +952,21 @@ When: "SERVER"
 Scripts:
 [
 	freelance/_freelance.gnut
+]
+
+
+// Zipline Utility
+When: "SERVER"
+Scripts:
+[
+    mp/_zipline_utility/_zipline_utility.gnut
+    mp/_zipline_utility/_zipline_func.gnut
+    mp/_zipline_utility/_zipline_debug.gnut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+	mp/_zipline_utility/sh_zipline_utility.gnut
+    mp/_zipline_utility/sh_zipline_panel.gnut
 ]

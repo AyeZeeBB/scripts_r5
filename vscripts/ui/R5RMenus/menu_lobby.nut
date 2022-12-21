@@ -75,8 +75,9 @@ void function InitR5RLobbyMenu( var newMenuArg )
 	file.menu = menu
 
 	//Add menu event handlers
-    AddMenuEventHandler( menu, eUIEvent.MENU_SHOW, OnR5RLobby_Open )
+    AddMenuEventHandler( menu, eUIEvent.MENU_SHOW, OnR5RLobby_Show )
 	AddMenuEventHandler( menu, eUIEvent.MENU_OPEN, OnR5RLobby_Open )
+	AddMenuEventHandler( menu, eUIEvent.MENU_CLOSE, OnR5RLobby_Close )
 	AddMenuEventHandler( menu, eUIEvent.MENU_NAVIGATE_BACK, OnR5RLobby_Back )
 
 	//Button event handlers
@@ -116,7 +117,6 @@ void function OpenSelectedPanel(var button)
 			CurrentPresentationType = ePresentationType.CHARACTER_SELECT
 			break;
 		case 2:
-			//thread ServerBrowser_RefreshServersForEveryone()
 			UI_SetPresentationType( ePresentationType.COLLECTION_EVENT )
 			CurrentPresentationType = ePresentationType.COLLECTION_EVENT
 			break;
@@ -135,9 +135,14 @@ void function QuitPressed(var button)
 	OpenConfirmExitToDesktopDialog()
 }
 
-void function OnR5RLobby_Open()
+void function OnR5RLobby_Close()
 {
-	//needed on both show and open
+	UnRegisterServerBrowserButtonPressedCallbacks()
+}
+
+void function OnR5RLobby_Show()
+{
+	ServerBrowser_UpdateFilterLists()
 	SetupLobby()
 
 	//Show Home Panel
@@ -147,10 +152,14 @@ void function OnR5RLobby_Open()
 
 	//Set back to default for next time
 	g_isAtMainMenu = false
-
 	server_host_name = ""
 
 	RunClientScript("UICallback_SetHostName", GetPlayerName() + "'s Lobby")
+}
+
+void function OnR5RLobby_Open()
+{
+	RegisterServerBrowserButtonPressedCallbacks()
 }
 
 void function SetupLobby()
